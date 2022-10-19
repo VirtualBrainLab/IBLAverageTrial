@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: AnnotationDataset
+  m_EditorClassIdentifier: 
+  m_GroupName: AnnotationDataset
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 436ddb74a295d954c8b8130a436c1d62
+  m_SerializeEntries:
+  - m_GUID: 43cce19ffbc67024fae366af9eae882c
+    m_Address: Assets/AddressableAssets/Datasets/ann/annotation_indexes.bytes
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: ee6251661fa79af469df6e1cdc5f64b8
+    m_Address: Assets/AddressableAssets/Datasets/ann/annotation_map.bytes
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: eb737450d42017848a7fc57cf086d3dd
+    m_Address: Assets/AddressableAssets/Datasets/volume_indexes.bytes
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 9fc1257868a6ce1488968c72223134bd, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 4fbe2ac50c7234946a0e68a9f7257a09, type: 2}
+    - {fileID: 11400000, guid: d95d38d92b3df7b4db47a2150afc7a34, type: 2}
