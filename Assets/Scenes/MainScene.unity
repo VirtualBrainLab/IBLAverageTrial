@@ -14767,7 +14767,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1036566685}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f138b45a35c68f742952782cea3aa89e, type: 3}
   m_Name: 
@@ -14834,7 +14834,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cc7276d5db255b4893f0c60da72fe54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _brainScale: 1
+  _brainScale: 0.5
   _useTransparentMaterials: 0
   _rigTransparency: 1
   transparentMaterial: {fileID: 2100000, guid: b2998437377770d4aa4d30895c5d061e, type: 2}
