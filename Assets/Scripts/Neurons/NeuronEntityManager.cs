@@ -6,7 +6,6 @@ using Unity.Transforms; // used to access Translation
 using Unity.Rendering; // used to access RenderMesh/Bounds
 using Unity.Collections;
 using Unity.Mathematics;
-using System.Drawing;
 
 /**
  * NeuronEntityManager is the MonoBehaviour class that handles all Neuron Entity interaction
@@ -31,6 +30,8 @@ public class NeuronEntityManager : MonoBehaviour
     [SerializeField] private float replayScale = 0.125f;
     [SerializeField] private float neuronScale = 0.015f;
     [SerializeField] private Utils util;
+
+    private static float3 nRootPos = new float3(5.7f, 4f, -6.6f);
 
     // Local tracking
     private float _currentNeuronScale;
@@ -392,7 +393,8 @@ public class NeuronEntityManager : MonoBehaviour
                 typeof(SpikingComponent),
                 typeof(SpikingColorComponent),
                 typeof(SpikingRandomComponent),
-                typeof(IBLEventAverageComponent)
+                typeof(IBLEventAverageComponent),
+                typeof(PositionComponent)
                 );
 
             int n = mlapdv.Count;
@@ -403,6 +405,7 @@ public class NeuronEntityManager : MonoBehaviour
             for (int i = 0; i < n; i++)
             {
                 Entity neuron = newNeurons[i];
+                eManager.SetComponentData(neuron, new PositionComponent { position = new float3(mlapdv[i]) });
                 eManager.SetComponentData(neuron, new Translation { Value = CCF2Transform(mlapdv[i]) });
                 eManager.SetComponentData(neuron, new Scale { Value = neuronScale });
                 eManager.SetSharedComponentData(neuron, neuronRenderMesh);
@@ -499,12 +502,12 @@ public class NeuronEntityManager : MonoBehaviour
     // X axis = -ML
     // Y axis = -DV
     // Z axis = AP
-    public float3 CCF2Transform(float3 mlapdv)
+    public static float3 CCF2Transform(float3 mlapdv)
     {
-        return new float3(-mlapdv.x, -mlapdv.z, mlapdv.y) + new float3(neuronRoot.transform.position);
+        return new float3(-mlapdv.x, -mlapdv.z, mlapdv.y) + nRootPos;
     }
-    public float3 CCF2Transform(Vector3 mlapdv)
+    public static float3 CCF2Transform(Vector3 mlapdv)
     {
-        return new float3(-mlapdv.x, -mlapdv.z, mlapdv.y) + new float3(neuronRoot.transform.position);
+        return new float3(-mlapdv.x, -mlapdv.z, mlapdv.y) + nRootPos;
     }
 }

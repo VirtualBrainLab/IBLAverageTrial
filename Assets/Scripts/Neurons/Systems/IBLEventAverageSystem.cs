@@ -23,11 +23,11 @@ public partial class IBLEventAverageSystem : SystemBase
         //trialTimeIndex = 0;
         iblTask = GameObject.Find("main").GetComponent<ExperimentManager>().GetIBLTask();
         nemanager = GameObject.Find("main").GetComponent<NeuronEntityManager>();
+        eaManager = GameObject.Find("main").GetComponent<EventAverageManager>();
     }
 
     protected override void OnUpdate()
     {
-
         //trialTimeIndex += 0.1f;
         float deltaTime = Time.DeltaTime;
         double curTime = Time.ElapsedTime;
@@ -68,12 +68,13 @@ public partial class IBLEventAverageSystem : SystemBase
         if (brainScale != prevBrainScale)
         {
             prevBrainScale = brainScale;
+            Debug.Log("update");
 
             // Update neurons
             Entities
-                .ForEach((ref Translation pos) =>
+                .ForEach((ref Translation pos, in PositionComponent origPos) =>
                 {
-                    // todo;
+                    pos.Value = new float3(5.7f - origPos.position.x, 4 - origPos.position.z, origPos.position.y - 6.6f) * brainScale;
                 }).ScheduleParallel();
         }
 

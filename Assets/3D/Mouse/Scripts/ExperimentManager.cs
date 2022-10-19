@@ -38,7 +38,7 @@ public class ExperimentManager : MonoBehaviour
 
     void Awake()
     {
-        Time.timeScale = 1.0f;
+        Time.timeScale = 0.125f;
 
         experiments = new List<Experiment>();
         experiments.Add(new IBLTask(vsmanager,audmanager,lickBehavior,wheelRotationBehavior, UIPanel));

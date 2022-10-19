@@ -10,10 +10,11 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 
 public class LoadData_IBL_EventAverage : MonoBehaviour
 {
-    [SerializeField] private ElectrodeManager elecmanager;
     [SerializeField] private CCFModelControl ccfmodelcontrol;
     [SerializeField] private NeuronEntityManager nemanager;
     [SerializeField] private VolumeDatasetManager vdmanager;
+
+    [SerializeField] private ExperimentManager _expManager;
 
     [SerializeField] private AssetReference uuidListReference;
     [SerializeField] private AssetReference dataReference;
@@ -24,6 +25,8 @@ public class LoadData_IBL_EventAverage : MonoBehaviour
     int conditions = 4;
     int[] side = { -1, -1, 1, 1 };
     int[] corr = { 1, -1, 1, -1 };
+
+    private float TIME_SCALE_FACTOR = 0.01f;
 
     public string displayMode = "spiking"; // Options: "spiking", "grayscaleFR, "byRegionFR"
 
@@ -73,7 +76,7 @@ public class LoadData_IBL_EventAverage : MonoBehaviour
 
             for (int i = 0; i < (SCALED_LEN * conditions); i++)
             {
-                spikeRate.AddNoResize(spikeRates[(ui * (SCALED_LEN * conditions)) + i]);
+                spikeRate.AddNoResize(spikeRates[(ui * (SCALED_LEN * conditions)) + i] * TIME_SCALE_FACTOR);
             }
 
             IBLEventAverageComponent eventAverageComponent = new IBLEventAverageComponent();
@@ -96,7 +99,15 @@ public class LoadData_IBL_EventAverage : MonoBehaviour
         {
             if (mlapdvData.ContainsKey(uuid))
             {
-                iblPos.Add(mlapdvData[uuid]);
+                if (UnityEngine.Random.value < 0.5f)
+                {
+                    // randomly flip the ML position of half the neurons
+                    float3 pos = mlapdvData[uuid];
+                    pos.x = 11.4f - pos.x;
+                    iblPos.Add(pos);
+                }
+                else
+                    iblPos.Add(mlapdvData[uuid]);
                 eventAverageComponents.Add(eventAverageData[uuid]);
             }
         }
@@ -139,12 +150,13 @@ public class LoadData_IBL_EventAverage : MonoBehaviour
                     maxRegionColors[i] = new float4(posColor.r, posColor.b, posColor.g, 1f);
                 }
                 nemanager.AddNeurons(iblPos, eventAverageComponents, zeroRegionColors, maxRegionColors);
-                Debug.Log("Here");
                 break;
 
             default:
                 Debug.Log("Given mode is invalid");
                 break;
         }
+
+        _expManager.Play();
     }
 }
