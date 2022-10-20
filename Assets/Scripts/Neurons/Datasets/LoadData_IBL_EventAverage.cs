@@ -26,7 +26,7 @@ public class LoadData_IBL_EventAverage : MonoBehaviour
     int[] side = { -1, -1, 1, 1 };
     int[] corr = { 1, -1, 1, -1 };
 
-    private float TIME_SCALE_FACTOR = 0.01f;
+    private float TIME_SCALE_FACTOR = 1f/125f;
 
     public string displayMode = "spiking"; // Options: "spiking", "grayscaleFR, "byRegionFR"
 
@@ -69,21 +69,31 @@ public class LoadData_IBL_EventAverage : MonoBehaviour
 
         List<IBLEventAverageComponent> eventAverageComponents = new List<IBLEventAverageComponent>();
 
+        int nG1 = 0;
+
         for (var ui = 0; ui < uuidList.Length; ui++)
         {
             string uuid = uuidList[ui];
             FixedList4096Bytes<float> spikeRate = new FixedList4096Bytes<float>();
+            float sum = 0f;
 
             for (int i = 0; i < (SCALED_LEN * conditions); i++)
             {
                 spikeRate.AddNoResize(spikeRates[(ui * (SCALED_LEN * conditions)) + i] * TIME_SCALE_FACTOR);
+                sum += spikeRates[(ui * (SCALED_LEN * conditions)) + i];
             }
 
-            IBLEventAverageComponent eventAverageComponent = new IBLEventAverageComponent();
-            eventAverageComponent.spikeRate = spikeRate;
-            if (!eventAverageData.ContainsKey(uuid))
-                eventAverageData.Add(uuid, eventAverageComponent);
+            if (sum > 1)
+            {
+                IBLEventAverageComponent eventAverageComponent = new IBLEventAverageComponent();
+                eventAverageComponent.spikeRate = spikeRate;
+                if (!eventAverageData.ContainsKey(uuid))
+                    eventAverageData.Add(uuid, eventAverageComponent);
+                nG1++;
+            }
         }
+
+        Debug.Log(string.Format("Found {0} neurons with total firing rates > 1 out of {1}", nG1, uuidList.Length));
 
 
         // load the UUID and MLAPDV data

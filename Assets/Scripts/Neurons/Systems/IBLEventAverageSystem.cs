@@ -84,12 +84,12 @@ public partial class IBLEventAverageSystem : SystemBase
             {
                 float4 maxFRColor = lerpColor.maxColor;
                 float4 zeroFRColor = lerpColor.zeroColor;
-                float curPercent = eventAverage.spikeRate[curIndex] / 125f;
+                float curPercent = eventAverage.spikeRate[curIndex];
                 color.Value = new float4(Mathf.Lerp(zeroFRColor.x, maxFRColor.x, curPercent),
                                          Mathf.Lerp(zeroFRColor.y, maxFRColor.y, curPercent),
                                          Mathf.Lerp(zeroFRColor.z, maxFRColor.z, curPercent),
                                          Mathf.Lerp(zeroFRColor.w, maxFRColor.w, curPercent));
-                scale.Value = 0.01f + curPercent * 0.0625f;
+                scale.Value = 0.01f + curPercent * 0.0625f * brainScale;
             }).ScheduleParallel(); // .Run();
     }
 }
