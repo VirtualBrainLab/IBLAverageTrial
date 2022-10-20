@@ -17,6 +17,9 @@ public class VisualStimulusManager : MonoBehaviour
     // TOOLTIP
     [SerializeField] private GameObject visStimTooltip;
 
+
+    [SerializeField] private EventAverageManager eamanager;
+
     // DRAG VARS
     public Camera uiCam;
     public Camera stimCam;
@@ -83,6 +86,14 @@ public class VisualStimulusManager : MonoBehaviour
 
     // Update is called once per frame
      void Update() {
+
+        if (eamanager.MaterialsTransparent)
+        {
+            if (curVisStim != null)
+                curVisStim.gameObject.SetActive(false);
+            return;
+        }
+
         if (debug)
         {
             int debugPosition = Mathf.FloorToInt(Time.realtimeSinceStartup);

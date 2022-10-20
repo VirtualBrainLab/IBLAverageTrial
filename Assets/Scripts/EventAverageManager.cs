@@ -9,7 +9,8 @@ public class EventAverageManager : MonoBehaviour
     [SerializeField] private float _rigTransparency = 1f;
 
     [SerializeField] private Material transparentMaterial;
-    private bool materialsTransparent;
+    private bool _materialsTransparent;
+    public bool MaterialsTransparent { get { return _materialsTransparent; } }
 
     [SerializeField] private GameObject rig;
     [SerializeField] private GameObject mouse;
@@ -23,7 +24,7 @@ public class EventAverageManager : MonoBehaviour
     private void Awake()
     {
         rendererDict = new Dictionary<Renderer, Material>();
-        materialsTransparent = false;
+        _materialsTransparent = false;
 
         foreach (Renderer renderer in rig.GetComponentsInChildren<Renderer>())
             if (!rendererDict.ContainsKey(renderer))
@@ -35,7 +36,7 @@ public class EventAverageManager : MonoBehaviour
 
     public void ReplaceMaterials()
     {
-        materialsTransparent = true;
+        _materialsTransparent = true;
         foreach (Renderer renderer in rendererDict.Keys)
         {
             //Color color = renderer.material.color;
@@ -47,7 +48,7 @@ public class EventAverageManager : MonoBehaviour
 
     public void RecoverMaterials()
     {
-        materialsTransparent = false;
+        _materialsTransparent = false;
         foreach (Renderer renderer in rendererDict.Keys)
             renderer.enabled = true;
             //renderer.material = rendererDict[renderer];
@@ -57,13 +58,13 @@ public class EventAverageManager : MonoBehaviour
 
     private void Update()
     {
-        if (_useTransparentMaterials && !materialsTransparent)
+        if (_useTransparentMaterials && !_materialsTransparent)
             ReplaceMaterials();
 
-        if (!_useTransparentMaterials && materialsTransparent)
+        if (!_useTransparentMaterials && _materialsTransparent)
             RecoverMaterials();
 
-        if (materialsTransparent)
+        if (_materialsTransparent)
             foreach (Renderer renderer in rendererDict.Keys)
             {
                 Color col = renderer.material.color;

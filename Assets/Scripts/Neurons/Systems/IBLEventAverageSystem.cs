@@ -68,7 +68,6 @@ public partial class IBLEventAverageSystem : SystemBase
         if (brainScale != prevBrainScale)
         {
             prevBrainScale = brainScale;
-            Debug.Log("update");
 
             // Update neurons
             Entities

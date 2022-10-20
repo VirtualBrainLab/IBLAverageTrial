@@ -19,6 +19,8 @@ public class ExperimentManager : MonoBehaviour
     public ElectrodeManager elecmanager;
     public NeuronEntityManager nemanager;
 
+    [SerializeField] EventAverageManager eamanager;
+
     public LickBehavior lickBehavior;
     public WheelRotationBehavior wheelRotationBehavior;
     public MouseAIBehavior mouseAI;

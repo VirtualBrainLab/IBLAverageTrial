@@ -197,17 +197,17 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4410177}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 5.5, z: 0}
+  m_LocalRotation: {x: 0, y: -0.13052624, z: 0, w: 0.9914449}
+  m_LocalPosition: {x: 1.15, y: 0, z: 1}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 149303303}
   - {fileID: 1793796628}
   - {fileID: 1633963605}
   m_Father: {fileID: 288253986}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -15, z: 0}
 --- !u!1 &8615011
 GameObject:
   m_ObjectHideFlags: 0
@@ -3754,7 +3754,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 4410178}
   m_RootOrder: 0
@@ -5366,9 +5366,9 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 288253984}
   m_LocalRotation: {x: 0, y: -1, z: 0, w: 0}
-  m_LocalPosition: {x: 0, y: -125, z: -37.4}
-  m_LocalScale: {x: 25, y: 25, z: 25}
-  m_ConstrainProportionsScale: 0
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 100, y: 100, z: 100}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 4410178}
   m_Father: {fileID: 0}
@@ -14842,6 +14842,7 @@ MonoBehaviour:
   stimPlane: {fileID: 299951442}
   debug: 0
   visStimTooltip: {fileID: 0}
+  eamanager: {fileID: 1036566702}
   uiCam: {fileID: 38478433}
   stimCam: {fileID: 924953816}
   stimuliMask:
@@ -14941,6 +14942,7 @@ MonoBehaviour:
   util: {fileID: 1036566697}
   elecmanager: {fileID: 2109663387496678654}
   nemanager: {fileID: 1036566700}
+  eamanager: {fileID: 0}
   lickBehavior: {fileID: 713980113}
   wheelRotationBehavior: {fileID: 713980110}
   mouseAI: {fileID: 713980112}
