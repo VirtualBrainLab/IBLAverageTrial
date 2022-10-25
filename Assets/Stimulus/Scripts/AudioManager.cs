@@ -50,7 +50,7 @@ public class AudioManager : MonoBehaviour
 
         for (int i = 0; i < samples.Length; i++)
         {
-            float value = util.GaussianNoise();
+            float value = GaussianNoise();
             if (i < rampSamples)
             {
                 value *= Ramp(rampSamples, i, true);
@@ -92,5 +92,12 @@ public class AudioManager : MonoBehaviour
         // Use cosine to go from 1->0
         float rampValue = Mathf.Cos(idx / rampDur * Mathf.PI) / 2 + 1;
         return up ? 1 - rampValue : rampValue;
+    }
+
+    private float GaussianNoise()
+    {
+        float u1 = 1.0f - Random.value; // uniform(0,1] random doubles
+        float u2 = 1.0f - Random.value;
+        return Mathf.Sqrt(-2.0f * Mathf.Log(u1)) * Mathf.Sin(2.0f * Mathf.PI * u2); // random normal(mean,stdDev^2)
     }
 }

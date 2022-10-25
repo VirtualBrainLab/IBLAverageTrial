@@ -37,7 +37,7 @@ public class TestEventAvgsAnimation : MonoBehaviour
 
         // for now just do the full brain node (#8) for testing
         CCFTreeNode node = modelControl.tree.findNode(8);
-        node.loadNodeModel(true);
+        node.LoadNodeModel(true, false);
         node.SetMaterial(brainMaterial);
         node.SetColor(Cool(0));
         nodes.Add(node);

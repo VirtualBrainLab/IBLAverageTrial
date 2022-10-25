@@ -358,29 +358,29 @@ public class UIClickHandler : MonoBehaviour
 
     void BrainCameraClickthrough()
     {
-        if (!brainTransformChanged && brainCameraClickthroughTarget)
-        {
-            if (brainCameraClickthroughTarget.CompareTag("ProbeModel"))
-            {
-                GameObject probe = brainCameraClickthroughTarget.transform.parent.gameObject; 
-                pmanager.DeactivatePlayerObjects();
-                probe.GetComponent<Electrode>().SetActive(true);
-                Debug.LogWarning("Workaround in place due to PlayerObject issues");
-                //NetworkManager.Singleton.ConnectedClients[NetworkManager.Singleton.LocalClientId].PlayerObject = probe.GetComponent<NetworkObject>();
+        //if (!brainTransformChanged && brainCameraClickthroughTarget)
+        //{
+        //    if (brainCameraClickthroughTarget.CompareTag("ProbeModel"))
+        //    {
+        //        GameObject probe = brainCameraClickthroughTarget.transform.parent.gameObject; 
+        //        pmanager.DeactivatePlayerObjects();
+        //        probe.GetComponent<Electrode>().SetActive(true);
+        //        Debug.LogWarning("Workaround in place due to PlayerObject issues");
+        //        //NetworkManager.Singleton.ConnectedClients[NetworkManager.Singleton.LocalClientId].PlayerObject = probe.GetComponent<NetworkObject>();
 
-            }
-            if (brainCameraClickthroughTarget.CompareTag("BrainRegion"))
-            {
-                string regionName = brainCameraClickthroughTarget.name;
-                GameObject[] toggles = GameObject.FindGameObjectsWithTag("OntologyToggle");
-                // This line finds the toggle corresponding to this brain region within
-                // the set of ontology toggles.
-                GameObject toggle = Array.Find(toggles, t => regionName.Equals(t.transform.Find("Label").GetComponent<Text>().text));
-                // Cycle this region's shader and update the toggle's status ('-', '/', or '+')
-                CycleBrainShader(brainCameraClickthroughTarget, toggle);
-            }
+        //    }
+        //    if (brainCameraClickthroughTarget.CompareTag("BrainRegion"))
+        //    {
+        //        string regionName = brainCameraClickthroughTarget.name;
+        //        GameObject[] toggles = GameObject.FindGameObjectsWithTag("OntologyToggle");
+        //        // This line finds the toggle corresponding to this brain region within
+        //        // the set of ontology toggles.
+        //        GameObject toggle = Array.Find(toggles, t => regionName.Equals(t.transform.Find("Label").GetComponent<Text>().text));
+        //        // Cycle this region's shader and update the toggle's status ('-', '/', or '+')
+        //        CycleBrainShader(brainCameraClickthroughTarget, toggle);
+        //    }
 
-        }
+        //}
     }
 
     void ToggleRegion(GameObject toggle) {
@@ -397,19 +397,19 @@ public class UIClickHandler : MonoBehaviour
     }
 
     void CycleBrainShader(GameObject region, GameObject regionToggle) {
-        BrainRegionSelector brs = region.GetComponent<BrainRegionSelector>();
-        brs.CycleModes();
-        // "+" for opaque, "/" for "jello", and "-" for transparent modes
-        if (regionToggle != null && regionToggle.activeSelf)
-        {
-            string status = brs.GetMode() switch
-            {
-                2 => "+",
-                1 => "/",
-                _ => "-",
-            };
-            regionToggle.transform.Find("Status").GetComponent<Text>().text = status;
-        }
+        //BrainRegionSelector brs = region.GetComponent<BrainRegionSelector>();
+        //brs.CycleModes();
+        //// "+" for opaque, "/" for "jello", and "-" for transparent modes
+        //if (regionToggle != null && regionToggle.activeSelf)
+        //{
+        //    string status = brs.GetMode() switch
+        //    {
+        //        2 => "+",
+        //        1 => "/",
+        //        _ => "-",
+        //    };
+        //    regionToggle.transform.Find("Status").GetComponent<Text>().text = status;
+        //}
     }
 
     public void ChangeBrainTransparency(float newAlpha) {

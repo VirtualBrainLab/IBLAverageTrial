@@ -23,7 +23,7 @@ public class PanelController : MonoBehaviour
             UILabel = GameObject.Find("FPS").GetComponent<Text>();
         } else
         {
-            GameObject.Find("FPS").SetActive(false);
+            //GameObject.Find("FPS").SetActive(false);
         }
 
         foreach (GameObject obj in GameObject.FindGameObjectsWithTag("MinPanels"))

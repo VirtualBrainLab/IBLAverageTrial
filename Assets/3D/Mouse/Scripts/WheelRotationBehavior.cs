@@ -6,7 +6,6 @@ using UnityEngine.Animations.Rigging;
 public class WheelRotationBehavior : MonoBehaviour
 {
     public VisualStimulusManager vsmanager;
-    public ElectrodeManager emanager;
 
     public Transform wheelTransform;
     public Transform wheelTargetTransform;
@@ -90,7 +89,6 @@ public class WheelRotationBehavior : MonoBehaviour
 
     public void ResetPaws()
     {
-        emanager.SetWheelVelocity(0f);
         // Move the paws back to the seat
         StartCoroutine(MoveToDefault(rightPawTarget, rightPawDefault));
         StartCoroutine(MoveToDefault(leftPawTarget, leftPawDefault));
@@ -159,7 +157,6 @@ public class WheelRotationBehavior : MonoBehaviour
             float normalizedTime = timeElapsed / moveDurationSlow;
             // Wheel rotation
             wheelTransform.rotation = Quaternion.Slerp(startRotation, toRotation, normalizedTime);
-            emanager.SetWheelVelocity(Mathf.Sign(steps) * 0.1f);
             // Hand position
             leftPawTarget.position = leftEndTransform.position;
             rightPawTarget.position = rightEndTransform.position;
@@ -170,7 +167,6 @@ public class WheelRotationBehavior : MonoBehaviour
         }
         while (timeElapsed < moveDurationSlow);
 
-        emanager.SetWheelVelocity(0f);
 
         int inc = (int)-Mathf.Sign(steps);
 

@@ -11,7 +11,6 @@ using UnityEngine;
  */
 public class VisualStimulusManager : MonoBehaviour
 {
-    public ElectrodeManager emanager;
     [SerializeField] private GameObject stimPlane;
     [SerializeField] private bool debug;
     // TOOLTIP
@@ -222,13 +221,7 @@ public class VisualStimulusManager : MonoBehaviour
             newStim.transform.position += offsetVector;
             // TODO: Fix errors with tooltips!!
             //newStim.GetComponent<VisualStimulusTooltip>().SetTooltipObject(visStimTooltip);
-            // Register with emanager
-            VisualStimulus vs = newStim.GetComponent<VisualStimulus>();
-            if (vs)
-            {
-                emanager.RegisterVisualStimulus(vs);
-            }
-
+            
             return newStim;
         }
         else
@@ -246,7 +239,6 @@ public class VisualStimulusManager : MonoBehaviour
     public void DestroyVisualStimulus(GameObject stimulus)
     {
         VisualStimulus vs = stimulus.GetComponent<VisualStimulus>();
-        emanager.RemoveVisualStimulus(vs);
         Destroy(stimulus);
     }
 
@@ -254,11 +246,6 @@ public class VisualStimulusManager : MonoBehaviour
     {
         foreach (GameObject stimulus in GameObject.FindGameObjectsWithTag("Stimulus"))
         {
-            VisualStimulus vs = stimulus.GetComponent<VisualStimulus>();
-            if (vs)
-            {
-                emanager.RemoveVisualStimulus(vs);
-            }
             Destroy(stimulus);
         }
     }

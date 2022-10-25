@@ -16,7 +16,6 @@ public class ExperimentManager : MonoBehaviour
     public VisualStimulusManager vsmanager;
     public AudioManager audmanager;
     public Utils util;
-    public ElectrodeManager elecmanager;
     public NeuronEntityManager nemanager;
 
     [SerializeField] EventAverageManager eamanager;

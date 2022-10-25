@@ -23,7 +23,7 @@ public partial class IBLEventAverageSystem : SystemBase
         //trialTimeIndex = 0;
         iblTask = GameObject.Find("main").GetComponent<ExperimentManager>().GetIBLTask();
         nemanager = GameObject.Find("main").GetComponent<NeuronEntityManager>();
-        eaManager = GameObject.Find("main").GetComponent<EventAverageManager>();
+        eaManager = GameObject.Find("EventAverage").GetComponent<EventAverageManager>();
     }
 
     protected override void OnUpdate()

@@ -20,8 +20,8 @@ public class NeuronEntityManager : MonoBehaviour
 {
     // Manager access
     EntityManager eManager;
-    [SerializeField] private ElectrodeManager elecmanager;
     [SerializeField] private CCFModelControl ccfmodelcontrol;
+    [SerializeField] private VolumeDatasetManager vdmanager;
 
     // Expose mesh and materials
     [SerializeField] private GameObject neuronRoot;
@@ -30,6 +30,8 @@ public class NeuronEntityManager : MonoBehaviour
     [SerializeField] private float replayScale = 0.125f;
     [SerializeField] private float neuronScale = 0.015f;
     [SerializeField] private Utils util;
+
+    private CCFAnnotationDataset annotationDataset;
 
     private static float3 nRootPos = new float3(5.7f, 4f, -6.6f);
 
@@ -52,6 +54,7 @@ public class NeuronEntityManager : MonoBehaviour
 
     void Awake()
     {
+
         neurons = new List<Entity>();
 
         eManager = World.DefaultGameObjectInjectionWorld.EntityManager;
@@ -182,7 +185,7 @@ public class NeuronEntityManager : MonoBehaviour
         for (int i = 0; i < mlapdvCoords.Count; i++)
         {
             // Calculate what area we are in and get the color
-            float annotation = elecmanager.GetAnnotation(apdvlr[i].x, apdvlr[i].y, apdvlr[i].z);
+            float annotation = vdmanager.GetAnnotationDataset().ValueAtIndex(apdvlr[i].x, apdvlr[i].y, apdvlr[i].z);
             Color neuronColor = ccfmodelcontrol.GetCCFAreaColorMinDepth((int)annotation);
             //Debug.Log("Neuron at " + apdvlr[i] + "in: " + annotation + " with color " + neuronColor);
             float4 color = new float4(neuronColor.r, neuronColor.g, neuronColor.b, 0.4f);
@@ -236,7 +239,7 @@ public class NeuronEntityManager : MonoBehaviour
         for (int i = 0; i < mlapdvCoords.Count; i++)
         {
             // Calculate what area we are in and get the color
-            float annotation = elecmanager.GetAnnotation(apdvlr[i].x, apdvlr[i].y, apdvlr[i].z);
+            float annotation = vdmanager.GetAnnotationDataset().ValueAtIndex(apdvlr[i].x, apdvlr[i].y, apdvlr[i].z);
             Color neuronColor = ccfmodelcontrol.GetCCFAreaColorMinDepth((int)annotation);
             //Debug.Log("Neuron at " + apdvlr[i] + "in: " + annotation + " with color " + neuronColor);
             float4 color = new float4(neuronColor.r, neuronColor.g, neuronColor.b, 0.4f);

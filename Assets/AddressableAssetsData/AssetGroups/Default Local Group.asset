@@ -16,19 +16,7 @@ MonoBehaviour:
   m_Data:
     m_SerializedData: []
   m_GUID: 593ccea26d859684aaa3019c494aff99
-  m_SerializeEntries:
-  - m_GUID: b25b668f0311d1e4cb2a0dc7f3d5d726
-    m_Address: Assets/AddressableAssets/Datasets/uuid_list.txt
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-  - m_GUID: 6ba9f86dc31d74c43a62ebac83fa666f
-    m_Address: Assets/AddressableAssets/Datasets/1d_clu_avgs.bytes
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-  - m_GUID: b5ac8f1a94b4e1a44821002c7dcd8cf2
-    m_Address: Assets/AddressableAssets/Datasets/1d_clu_avgs_raw.bytes
-    m_ReadOnly: 0
-    m_SerializedLabels: []
+  m_SerializeEntries: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 9fc1257868a6ce1488968c72223134bd, type: 2}
   m_SchemaSet:

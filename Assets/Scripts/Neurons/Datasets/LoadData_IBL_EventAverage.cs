@@ -16,8 +16,12 @@ public class LoadData_IBL_EventAverage : MonoBehaviour
 
     [SerializeField] private ExperimentManager _expManager;
 
-    [SerializeField] private AssetReference uuidListReference;
-    [SerializeField] private AssetReference dataReference;
+    //[SerializeField] private AssetReference uuidListReference;
+    //[SerializeField] private AssetReference dataReference;
+
+    [SerializeField] private TextAsset dataAsset;
+    [SerializeField] private TextAsset uuidListAsset;
+
     public Utils util;
 
     //float scale = 1000;
@@ -38,13 +42,12 @@ public class LoadData_IBL_EventAverage : MonoBehaviour
         Debug.Log("Loading Event Average Data...");
         //ParseIBLData_EventAverage();
 
-        AsyncStart();
+        vdmanager.LoadAnnotationDataset(new List<Action> { DelayedStart });
     }
 
-    private async void AsyncStart()
+    private void DelayedStart()
     {
-        await vdmanager.LoadAnnotationDataset(new List<Action> { });
-        AnnotationDataset annotationDataset = vdmanager.GetAnnotationDataset();
+        CCFAnnotationDataset annotationDataset = vdmanager.GetAnnotationDataset();
 
 
         Dictionary<string, IBLEventAverageComponent> eventAverageData = new Dictionary<string, IBLEventAverageComponent>();
@@ -52,17 +55,20 @@ public class LoadData_IBL_EventAverage : MonoBehaviour
         // load the UUID information for the event average data
         // ibl/large_files/baseline_1d_clu_avgs
         // ibl/uuid_list
-        AsyncOperationHandle<TextAsset> uuidListHandle = Addressables.LoadAssetAsync<TextAsset>(uuidListReference);
-        await uuidListHandle.Task;
+        //AsyncOperationHandle<TextAsset> uuidListHandle = Addressables.LoadAssetAsync<TextAsset>(uuidListReference);
+        //await uuidListHandle.Task;
 
-        string uuidListFile = uuidListHandle.Result.text;
+        //string uuidListFile = uuidListHandle.Result.text;
 
+        string uuidListFile = uuidListAsset.text;
         string[] uuidList = uuidListFile.Split(char.Parse(","));
 
-        AsyncOperationHandle<TextAsset> dataHandle = Addressables.LoadAssetAsync<TextAsset>(dataReference);
-        await dataHandle.Task;
+        //AsyncOperationHandle<TextAsset> dataHandle = Addressables.LoadAssetAsync<TextAsset>(dataReference);
+        //await dataHandle.Task;
 
-        byte[] tempData = dataHandle.Result.bytes;
+        //byte[] tempData = dataHandle.Result.bytes;
+
+        byte[] tempData = dataAsset.bytes;
 
         float[] spikeRates = new float[tempData.Length / 4];
         Buffer.BlockCopy(tempData, 0, spikeRates, 0, tempData.Length);
@@ -97,7 +103,19 @@ public class LoadData_IBL_EventAverage : MonoBehaviour
 
 
         // load the UUID and MLAPDV data
-        Dictionary<string, float3> mlapdvData = util.LoadIBLmlapdv();
+        // load the UUID and MLAPDV data
+        List<Dictionary<string, object>> data_mlapdv = CSVReader.ReadFromResources("Datasets/ibl/uuid_mlapdv");
+        Dictionary<string, float3> mlapdvData = new Dictionary<string, float3>();
+        float scale = 1000f;
+
+        for (var i = 0; i < data_mlapdv.Count; i++)
+        {
+            string uuid = (string)data_mlapdv[i]["uuid"];
+            float ml = (float)data_mlapdv[i]["ml"] / scale;
+            float ap = (float)data_mlapdv[i]["ap"] / scale;
+            float dv = (float)data_mlapdv[i]["dv"] / scale;
+            mlapdvData.Add(uuid, new float3(ml, ap, dv));
+        }
 
         //spikeRateMap = util.LoadBinaryFloatHelper("ibl/1d_clu_avgs_map");
         //byte[] spikeRates = util.LoadBinaryByteHelper("ibl/1d_clu_avgs_uint8");

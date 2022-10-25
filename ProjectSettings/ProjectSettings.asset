@@ -13,7 +13,7 @@ PlayerSettings:
   useOnDemandResources: 0
   accelerometerFrequency: 60
   companyName: Daniel Birman @ UW
-  productName: NPTrajectoryPlanner
+  productName: IBLAvgTrial
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.13725491, g: 0.12156863, b: 0.1254902, a: 1}
@@ -134,12 +134,10 @@ PlayerSettings:
     16:10: 1
     16:9: 1
     Others: 1
-  bundleVersion: 0.4.0
+  bundleVersion: 0.1.0
   preloadedAssets:
   - {fileID: 0}
   - {fileID: 0}
-  - {fileID: 953286282696471094, guid: 66667db36d0aa62489a653406e36a190, type: 2}
-  - {fileID: -1231099537486031601, guid: 91f9aef3409b6e14f9903d9a6a54670c, type: 2}
   metroInputSource: 0
   wsaTransparentSwapchain: 0
   m_HolographicPauseOnTrackingLoss: 1
@@ -159,7 +157,7 @@ PlayerSettings:
   androidSupportedAspectRatio: 1
   androidMaxAspectRatio: 2.1
   applicationIdentifier:
-    Standalone: com.Daniel-Birman---UW.NPTrajectoryPlanner
+    Standalone: com.Daniel-Birman---UW.IBLAvgTrial
   buildNumber:
     Standalone: 0
     iPhone: 0

@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class EventAverageManager : MonoBehaviour
 {
+    [SerializeField] private CCFModelControl modelControl;
+
     [SerializeField] private float _brainScale = 1f;
     [SerializeField] private bool _useTransparentMaterials = false;
     [SerializeField] private float _rigTransparency = 1f;
@@ -15,7 +17,8 @@ public class EventAverageManager : MonoBehaviour
     [SerializeField] private GameObject rig;
     [SerializeField] private GameObject mouse;
 
-    [SerializeField] private Transform brain;
+    [SerializeField] private Transform brainModelT;
+    [SerializeField] private Transform brainAreasT;
 
     public float BrainScale { get { return _brainScale; } }
 
@@ -32,6 +35,22 @@ public class EventAverageManager : MonoBehaviour
         foreach (Renderer renderer in mouse.GetComponentsInChildren<Renderer>())
             if (!rendererDict.ContainsKey(renderer))
                 rendererDict.Add(renderer, renderer.material);
+    }
+
+    private void Start()
+    {
+        modelControl.LateStart(true);
+        LateStart();
+    }
+
+    private async void LateStart()
+    {
+        await modelControl.GetDefaultLoadedTask();
+
+        foreach (CCFTreeNode node in modelControl.GetDefaultLoadedNodes())
+            node.SetNodeModelVisibility_Full(true);
+
+        brainAreasT.localScale = Vector3.one / 2f;
     }
 
     public void ReplaceMaterials()
@@ -58,6 +77,15 @@ public class EventAverageManager : MonoBehaviour
 
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.T))
+            _useTransparentMaterials = !_useTransparentMaterials;
+
+        if (Input.GetKeyDown(KeyCode.Equals))
+            _brainScale++;
+
+        if (Input.GetKeyDown(KeyCode.Minus))
+            _brainScale--;
+
         if (_useTransparentMaterials && !_materialsTransparent)
             ReplaceMaterials();
 
@@ -72,7 +100,7 @@ public class EventAverageManager : MonoBehaviour
                 renderer.material.color = col;
             }
 
-        brain.localScale = new Vector3(_brainScale, _brainScale, _brainScale);
+        brainModelT.localScale = new Vector3(_brainScale, _brainScale, _brainScale);
 
 
 

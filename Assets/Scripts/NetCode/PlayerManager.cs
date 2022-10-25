@@ -12,59 +12,59 @@ using UnityEngine;
  */
 public class PlayerManager : NetworkBehaviour
 {
-    [SerializeField] private Transform brainModelTransform;
-    [SerializeField] private GameObject defaultPlayerPrefab;
+    //[SerializeField] private Transform brainModelTransform;
+    //[SerializeField] private GameObject defaultPlayerPrefab;
 
-    private List<GameObject> playerObjects;
+    //private List<GameObject> playerObjects;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        playerObjects = new List<GameObject>();
-    }
+    //// Start is called before the first frame update
+    //void Start()
+    //{
+    //    playerObjects = new List<GameObject>();
+    //}
 
-    public void ClientStart()
-    {
-        // Does nothing right now
-    }
+    //public void ClientStart()
+    //{
+    //    // Does nothing right now
+    //}
 
-    public void SpawnPlayerObject()
-    {
-        if (!IsClient) return;
+    //public void SpawnPlayerObject()
+    //{
+    //    if (!IsClient) return;
 
-        SpawnPlayerObjectServerRpc(NetworkManager.Singleton.LocalClientId);
-    }
+    //    SpawnPlayerObjectServerRpc(NetworkManager.Singleton.LocalClientId);
+    //}
 
-    [ServerRpc(RequireOwnership = false)]
-    private void SpawnPlayerObjectServerRpc(ulong clientId)
-    {
-        if (!IsServer) return;
+    //[ServerRpc(RequireOwnership = false)]
+    //private void SpawnPlayerObjectServerRpc(ulong clientId)
+    //{
+    //    if (!IsServer) return;
 
-        // Create the player object, assign ownership, and make invisible to everybody except the requesting player
-        GameObject temp = Instantiate(defaultPlayerPrefab, brainModelTransform);
-        DeactivatePlayerObjects();
-        temp.GetComponent<Electrode>().SetActive(true);
-        NetworkObject tempNO = temp.GetComponent<NetworkObject>();
-        tempNO.SpawnAsPlayerObject(clientId);
-        // Deal with visibility
-        foreach (ulong keyClientId in NetworkManager.Singleton.ConnectedClients.Keys)
-        {
-            // don't hide object from the client that requested it
-            if (clientId != keyClientId)
-            {
-                tempNO.NetworkHide(keyClientId);
-            }
-        }
+    //    // Create the player object, assign ownership, and make invisible to everybody except the requesting player
+    //    GameObject temp = Instantiate(defaultPlayerPrefab, brainModelTransform);
+    //    DeactivatePlayerObjects();
+    //    temp.GetComponent<Electrode>().SetActive(true);
+    //    NetworkObject tempNO = temp.GetComponent<NetworkObject>();
+    //    tempNO.SpawnAsPlayerObject(clientId);
+    //    // Deal with visibility
+    //    foreach (ulong keyClientId in NetworkManager.Singleton.ConnectedClients.Keys)
+    //    {
+    //        // don't hide object from the client that requested it
+    //        if (clientId != keyClientId)
+    //        {
+    //            tempNO.NetworkHide(keyClientId);
+    //        }
+    //    }
 
-        playerObjects.Add(temp);
-    }
+    //    playerObjects.Add(temp);
+    //}
 
-    public void DeactivatePlayerObjects()
-    {
-        foreach (GameObject go in playerObjects)
-        {
-            go.GetComponent<Electrode>().SetActive(false);
-            Debug.Log("Setting each electrode to be inactive");
-        }
-    }
+    //public void DeactivatePlayerObjects()
+    //{
+    //    foreach (GameObject go in playerObjects)
+    //    {
+    //        go.GetComponent<Electrode>().SetActive(false);
+    //        Debug.Log("Setting each electrode to be inactive");
+    //    }
+    //}
 }
