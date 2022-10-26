@@ -451,7 +451,7 @@ public class NeuronEntityManager : MonoBehaviour
             eManager.SetComponentData(neuron, new Translation { Value = CCF2Transform(mlapdv[i]) });
             eManager.SetComponentData(neuron, new Scale { Value = neuronScale });
             eManager.SetSharedComponentData(neuron, neuronRenderMesh);
-
+            eManager.SetComponentData(neuron, new MaterialColor { Value = maxColorVals[i] });
             eManager.SetComponentData(neuron, eventAverage[i]);
             eManager.SetComponentData(neuron, new LerpColorComponent { zeroColor = zeroColorVals[i], maxColor = maxColorVals[i]} );
 

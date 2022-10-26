@@ -52,21 +52,10 @@ public class LoadData_IBL_EventAverage : MonoBehaviour
 
         Dictionary<string, IBLEventAverageComponent> eventAverageData = new Dictionary<string, IBLEventAverageComponent>();
 
-        // load the UUID information for the event average data
-        // ibl/large_files/baseline_1d_clu_avgs
-        // ibl/uuid_list
-        //AsyncOperationHandle<TextAsset> uuidListHandle = Addressables.LoadAssetAsync<TextAsset>(uuidListReference);
-        //await uuidListHandle.Task;
-
-        //string uuidListFile = uuidListHandle.Result.text;
 
         string uuidListFile = uuidListAsset.text;
         string[] uuidList = uuidListFile.Split(char.Parse(","));
 
-        //AsyncOperationHandle<TextAsset> dataHandle = Addressables.LoadAssetAsync<TextAsset>(dataReference);
-        //await dataHandle.Task;
-
-        //byte[] tempData = dataHandle.Result.bytes;
 
         byte[] tempData = dataAsset.bytes;
 
