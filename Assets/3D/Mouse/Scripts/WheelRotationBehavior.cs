@@ -28,8 +28,8 @@ public class WheelRotationBehavior : MonoBehaviour
 
     //int degreesLeft = 0;
 
-    public float moveDurationFast = 0.025f;
-    public float moveDurationSlow = 0.05f;
+    public float moveDurationFast = 0.005f;
+    public float moveDurationSlow = 0.01f;
 
     public int degreesPerStep = 20;
     public float visualDegreesRatio = 0.25f; // Formerly 0.25f

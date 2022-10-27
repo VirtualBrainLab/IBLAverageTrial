@@ -31,10 +31,25 @@ public class IBLTask : Experiment
 
     // LOCAL TASK PARAMETER
     // 37 51 62 100 (250 total)
-    private int stimOnIdx = 37 - 1;
-    private int firstWheelIdx = (37 + 51) - 1;
-    private int feedbackIdx = (37 + 51 + 62) - 1;
-    private int endIdx = (37 + 51 + 62 + 100) - 1;
+
+    //avg_event_idxs_by_type = [[92, 130, 157], # left correct
+    //                       [83, 131, 166], # left incorrect
+    //                       [91, 131, 158], # right correct
+    //                       [84, 131, 165]] # right incorrect
+
+    //                          stim wheel feedback
+    private static int[] leftCorrIdx = { 92, 130, 157 };
+    private static int[] leftIncIdx = { 83, 131, 166 };
+    private static int[] rightCorrIdx = { 91, 131, 158 };
+    private static int[] rightIncIdx = { 84, 131, 165 };
+
+    private int[][] eventIdxsByType = { leftCorrIdx, leftIncIdx, rightCorrIdx, rightIncIdx };
+
+    //private int stimOnIdx = 37 - 1;
+    //private int firstWheelIdx = (37 + 51) - 1;
+    //private int feedbackIdx = (37 + 51 + 62) - 1;
+    //private int endIdx = (37 + 51 + 62 + 100) - 1;
+
 
     // INTERNAL TRACKING
     // 0=qui 1=stim on 2=wheel moving 3=reward 4=ITI
@@ -110,6 +125,14 @@ public class IBLTask : Experiment
             {
                 t_stateTime += Time.deltaTime;
 
+                int type = GetSide() == -1 ?
+                    GetCorrect() ? 0 : 1 :
+                    GetCorrect() ? 2 : 3;
+
+                int stimOnIdx = eventIdxsByType[type][0];
+                int firstWheelIdx = eventIdxsByType[type][1];
+                int feedbackIdx = eventIdxsByType[type][2];
+                
                 switch (state)
                 {
                     // Each state returns true when it has completed, triggering some next state functionality
@@ -218,7 +241,7 @@ public class IBLTask : Experiment
                     case 3:
                         // Reward + ITI
                         // lerp and round to get the index
-                        trialTimeIndex = Mathf.RoundToInt(Mathf.Lerp(feedbackIdx, endIdx, t_stateTime / t_iti));
+                        trialTimeIndex = Mathf.RoundToInt(Mathf.Lerp(feedbackIdx, 249, t_stateTime / t_iti));
 
                         if (_feedback != 0 && Time.realtimeSinceStartup > (_feedbackTime + _feedbackWindow))
                             _feedback = 0f;

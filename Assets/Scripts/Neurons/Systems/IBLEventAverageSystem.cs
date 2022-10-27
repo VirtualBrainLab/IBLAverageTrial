@@ -35,6 +35,7 @@ public partial class IBLEventAverageSystem : SystemBase
         int curIndex = iblTask.GetTimeIndex();
         float smallScale = nemanager.GetNeuronScale();
 
+        float brainScaleRaw = eaManager.BrainScale;
         float brainScale = 0.0625f * eaManager.BrainScale;
 
         int trialStartIdx;
@@ -73,7 +74,7 @@ public partial class IBLEventAverageSystem : SystemBase
             Entities
                 .ForEach((ref Translation pos, in PositionComponent origPos) =>
                 {
-                    pos.Value = new float3(5.7f - origPos.position.x, 4 - origPos.position.z, origPos.position.y - 6.6f) * brainScale;
+                    pos.Value = new float3(5.7f - origPos.position.x, 4 - origPos.position.z, origPos.position.y - 6.6f) * brainScaleRaw;
                 }).ScheduleParallel();
         }
 
