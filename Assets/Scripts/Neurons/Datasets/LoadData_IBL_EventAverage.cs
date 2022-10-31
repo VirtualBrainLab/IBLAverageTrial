@@ -21,6 +21,7 @@ public class LoadData_IBL_EventAverage : MonoBehaviour
 
     [SerializeField] private TextAsset dataAsset;
     [SerializeField] private TextAsset uuidListAsset;
+    [SerializeField] private TextAsset mlapdvAsset;
 
     public Utils util;
 
@@ -39,7 +40,6 @@ public class LoadData_IBL_EventAverage : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Log("Loading Event Average Data...");
         //ParseIBLData_EventAverage();
 
         vdmanager.LoadAnnotationDataset(new List<Action> { DelayedStart });
@@ -47,11 +47,14 @@ public class LoadData_IBL_EventAverage : MonoBehaviour
 
     private void DelayedStart()
     {
+        Debug.Log("Loading Event Average Data...");
         CCFAnnotationDataset annotationDataset = vdmanager.GetAnnotationDataset();
 
+        Debug.Log("1");
 
         Dictionary<string, IBLEventAverageComponent> eventAverageData = new Dictionary<string, IBLEventAverageComponent>();
 
+        Debug.Log("2");
 
         string uuidListFile = uuidListAsset.text;
         string[] uuidList = uuidListFile.Split(char.Parse(","));
@@ -63,8 +66,6 @@ public class LoadData_IBL_EventAverage : MonoBehaviour
         Buffer.BlockCopy(tempData, 0, spikeRates, 0, tempData.Length);
 
         List<IBLEventAverageComponent> eventAverageComponents = new List<IBLEventAverageComponent>();
-
-        int nG1 = 0;
 
         for (var ui = 0; ui < uuidList.Length; ui++)
         {
@@ -78,22 +79,19 @@ public class LoadData_IBL_EventAverage : MonoBehaviour
                 sum += spikeRates[(ui * (SCALED_LEN * conditions)) + i];
             }
 
-            if (sum > 1)
-            {
-                IBLEventAverageComponent eventAverageComponent = new IBLEventAverageComponent();
-                eventAverageComponent.spikeRate = spikeRate;
-                if (!eventAverageData.ContainsKey(uuid))
-                    eventAverageData.Add(uuid, eventAverageComponent);
-                nG1++;
-            }
+            IBLEventAverageComponent eventAverageComponent = new IBLEventAverageComponent();
+            eventAverageComponent.spikeRate = spikeRate;
+            if (!eventAverageData.ContainsKey(uuid))
+                eventAverageData.Add(uuid, eventAverageComponent);
         }
 
-        Debug.Log(string.Format("Found {0} neurons with total firing rates > 1 out of {1}", nG1, uuidList.Length));
-
-
+        Debug.Log("3");
         // load the UUID and MLAPDV data
         // load the UUID and MLAPDV data
-        List<Dictionary<string, object>> data_mlapdv = CSVReader.ReadFromResources("Datasets/ibl/uuid_mlapdv");
+
+        List<Dictionary<string, object>> data_mlapdv = CSVReader.ParseText(mlapdvAsset.text);
+        //List<Dictionary<string, object>> data_mlapdv = CSVReader.ReadFromResources("Datasets/ibl/uuid_mlapdv");
+
         Dictionary<string, float3> mlapdvData = new Dictionary<string, float3>();
         float scale = 1000f;
 
@@ -106,6 +104,7 @@ public class LoadData_IBL_EventAverage : MonoBehaviour
             mlapdvData.Add(uuid, new float3(ml, ap, dv));
         }
 
+        Debug.Log("4");
         //spikeRateMap = util.LoadBinaryFloatHelper("ibl/1d_clu_avgs_map");
         //byte[] spikeRates = util.LoadBinaryByteHelper("ibl/1d_clu_avgs_uint8");
 
@@ -128,8 +127,9 @@ public class LoadData_IBL_EventAverage : MonoBehaviour
                 eventAverageComponents.Add(eventAverageData[uuid]);
             }
         }
-        int n = eventAverageComponents.Count;
-        Debug.Log("Num neurons: " + eventAverageComponents.Count);
+        Debug.Log("5");
+
+        Debug.Log(string.Format("Number of neurons: {0}", eventAverageComponents.Count));
 
         /*for (int i = 0; i < n / 100; i++)
         {
@@ -144,15 +144,15 @@ public class LoadData_IBL_EventAverage : MonoBehaviour
                 break;
 
             case "grayscaleFR":
-                float4[] zeroColors = (float4[]) Enumerable.Repeat(new float4(0f, 0f, 0f, 0f), n).ToArray();
-                float4[] maxColors = (float4[]) Enumerable.Repeat(new float4(1f, 1f, 1f, 1f), n).ToArray();
+                float4[] zeroColors = (float4[]) Enumerable.Repeat(new float4(0f, 0f, 0f, 0f), eventAverageComponents.Count).ToArray();
+                float4[] maxColors = (float4[]) Enumerable.Repeat(new float4(1f, 1f, 1f, 1f), eventAverageComponents.Count).ToArray();
                 nemanager.AddNeurons(iblPos, eventAverageComponents, zeroColors, maxColors);
                 break;
 
             case "byRegionFR":
-                float4[] zeroRegionColors = new float4[n];
-                float4[] maxRegionColors = new float4[n];
-                for (int i = 0; i < n; i++)
+                float4[] zeroRegionColors = new float4[eventAverageComponents.Count];
+                float4[] maxRegionColors = new float4[eventAverageComponents.Count];
+                for (int i = 0; i < eventAverageComponents.Count; i++)
                 {
                     float3 pos = iblPos[i];
                     //Debug.Log(pos.x);

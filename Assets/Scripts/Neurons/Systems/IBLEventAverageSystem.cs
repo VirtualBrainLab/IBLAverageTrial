@@ -48,22 +48,7 @@ public partial class IBLEventAverageSystem : SystemBase
             trialStartIdx = corr ? 500 : 750;
         }
         curIndex += trialStartIdx;
-
-        // Update spiking neurons
-        //Entities
-        //    .ForEach((ref Scale scale, ref MaterialColor color, ref SpikingComponent spikeComp, ref SpikingRandomComponent randComp, in IBLEventAverageComponent eventAverage) =>
-        //    {
-        //        float neuronFiringRate = eventAverage.spikeRate.ElementAt(curIndex) * deltaTime;
-                
-        //        // check if a random value is lower than this (Poisson spiking)
-        //        if (randComp.rand.NextFloat(1f) < neuronFiringRate)
-        //        {
-        //            spikeComp.spiking = 1f;
-        //            color.Value = new float4(1f, 1f, 1f, 0.65f);
-        //            scale.Value = 0.12f;
-        //        }
-
-        //    }).ScheduleParallel(); // .Run();
+        float curIndexPerc = curIndex / 999f;
 
         // check for scale change
         if (brainScale != prevBrainScale)
@@ -72,9 +57,10 @@ public partial class IBLEventAverageSystem : SystemBase
 
             // Update neurons
             Entities
-                .ForEach((ref Translation pos, in PositionComponent origPos) =>
+                .ForEach((ref Translation pos, ref Scale scale, in PositionComponent origPos) =>
                 {
                     pos.Value = new float3(5.7f - origPos.position.x, 4 - origPos.position.z, origPos.position.y - 6.6f) * brainScaleRaw;
+                    scale.Value = 0.015f * brainScaleRaw;
                 }).ScheduleParallel();
         }
 
@@ -91,5 +77,11 @@ public partial class IBLEventAverageSystem : SystemBase
                 //                         Mathf.Lerp(zeroFRColor.w, maxFRColor.w, curPercent));
                 scale.Value = 0.01f + curPercent * brainScale;
             }).ScheduleParallel(); // .Run();
+
+        Entities
+            .ForEach((ref MaterialVCoord vCoord) =>
+            {
+                vCoord.Value = curIndexPerc;
+            }).ScheduleParallel();
     }
 }

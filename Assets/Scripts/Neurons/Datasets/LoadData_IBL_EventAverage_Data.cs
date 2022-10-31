@@ -7,6 +7,7 @@ using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
+using UnityEditor;
 
 public class LoadData_IBL_EventAverage_Data : MonoBehaviour
 {
@@ -21,6 +22,7 @@ public class LoadData_IBL_EventAverage_Data : MonoBehaviour
 
     [SerializeField] private TextAsset dataAsset;
     [SerializeField] private TextAsset uuidListAsset;
+    [SerializeField] private TextAsset mlapdvAsset;
 
     public Utils util;
 
@@ -30,7 +32,7 @@ public class LoadData_IBL_EventAverage_Data : MonoBehaviour
     int[] side = { -1, -1, 1, 1 };
     int[] corr = { 1, -1, 1, -1 };
 
-    private float TIME_SCALE_FACTOR = 1f/125f;
+    private float MAX_SPKRATE = 500f;
 
     public string displayMode = "spiking"; // Options: "spiking", "grayscaleFR, "byRegionFR"
 
@@ -49,53 +51,16 @@ public class LoadData_IBL_EventAverage_Data : MonoBehaviour
     {
         CCFAnnotationDataset annotationDataset = vdmanager.GetAnnotationDataset();
 
-
-        Dictionary<string, IBLEventAverageComponent> eventAverageData = new Dictionary<string, IBLEventAverageComponent>();
-
-
         string uuidListFile = uuidListAsset.text;
         string[] uuidList = uuidListFile.Split(char.Parse(","));
-
 
         byte[] tempData = dataAsset.bytes;
 
         float[] spikeRates = new float[tempData.Length / 4];
         Buffer.BlockCopy(tempData, 0, spikeRates, 0, tempData.Length);
 
-        // Instead of creating EventAverageComponents 
+        List<Dictionary<string, object>> data_mlapdv = CSVReader.ParseText(mlapdvAsset.text);
 
-        List<IBLEventAverageComponent> eventAverageComponents = new List<IBLEventAverageComponent>();
-
-        int nG1 = 0;
-
-        for (var ui = 0; ui < uuidList.Length; ui++)
-        {
-            string uuid = uuidList[ui];
-            FixedList4096Bytes<float> spikeRate = new FixedList4096Bytes<float>();
-            float sum = 0f;
-
-            for (int i = 0; i < (SCALED_LEN * conditions); i++)
-            {
-                spikeRate.AddNoResize(spikeRates[(ui * (SCALED_LEN * conditions)) + i] * TIME_SCALE_FACTOR);
-                sum += spikeRates[(ui * (SCALED_LEN * conditions)) + i];
-            }
-
-            if (sum > 1)
-            {
-                IBLEventAverageComponent eventAverageComponent = new IBLEventAverageComponent();
-                eventAverageComponent.spikeRate = spikeRate;
-                if (!eventAverageData.ContainsKey(uuid))
-                    eventAverageData.Add(uuid, eventAverageComponent);
-                nG1++;
-            }
-        }
-
-        Debug.Log(string.Format("Found {0} neurons with total firing rates > 1 out of {1}", nG1, uuidList.Length));
-
-
-        // load the UUID and MLAPDV data
-        // load the UUID and MLAPDV data
-        List<Dictionary<string, object>> data_mlapdv = CSVReader.ReadFromResources("Datasets/ibl/uuid_mlapdv");
         Dictionary<string, float3> mlapdvData = new Dictionary<string, float3>();
         float scale = 1000f;
 
@@ -108,73 +73,64 @@ public class LoadData_IBL_EventAverage_Data : MonoBehaviour
             mlapdvData.Add(uuid, new float3(ml, ap, dv));
         }
 
-        //spikeRateMap = util.LoadBinaryFloatHelper("ibl/1d_clu_avgs_map");
-        //byte[] spikeRates = util.LoadBinaryByteHelper("ibl/1d_clu_avgs_uint8");
+        // Find all indexes in uuidList that are valid
+        List<int> validIndexes = new List<int>();
+        List<float3> validMlapdv = new List<float3>();
 
-        // Figure out which neurons we have both a mlapdv data and an event average dataset
-        List<float3> iblPos = new List<float3>();
-
-        foreach (string uuid in eventAverageData.Keys)
-        {
-            if (mlapdvData.ContainsKey(uuid))
+        for (int i = 0; i < uuidList.Length; i++)
+            if (mlapdvData.ContainsKey(uuidList[i]))
             {
-                if (UnityEngine.Random.value < 0.5f)
-                {
-                    // randomly flip the ML position of half the neurons
-                    float3 pos = mlapdvData[uuid];
-                    pos.x = 11.4f - pos.x;
-                    iblPos.Add(pos);
-                }
-                else
-                    iblPos.Add(mlapdvData[uuid]);
-                eventAverageComponents.Add(eventAverageData[uuid]);
+                validIndexes.Add(i);
+                validMlapdv.Add(mlapdvData[uuidList[i]]);
             }
-        }
-        int n = eventAverageComponents.Count;
-        Debug.Log("Num neurons: " + eventAverageComponents.Count);
 
-        /*for (int i = 0; i < n / 100; i++)
+        // Set up texture
+
+        // [TODO]
+        // Note that we'll use the r/g/b indexes to represent different scaling sizes for different timepoints
+        // so the time index 0->999 maps onto index%3 and then which channel based on the remainder.
+
+        int nTimepoints = SCALED_LEN * conditions;
+
+        // For now, we just map onto 1000 values but just use the red channel
+        //Debug.Log(string.Format("Texture size ({0},{1})", validIndexes.Count, nTimepoints));
+        //Texture2D dataTexture = new Texture2D(validIndexes.Count, nTimepoints);
+        float[] uCoords = new float[validIndexes.Count];
+
+        int pos = 0;
+        float maxScale = 0f;
+        foreach (int ui in validIndexes)
         {
-            Debug.Log(iblPos[i] + ", " + spikeRates[i * 1000] + ", " + eventAverageComponents[i].spikeRate[0]);
-        }*/
-
-        // Add neurons with different components based on the current display mode
-        switch (displayMode)
-        {
-            case "spiking":
-                nemanager.AddNeurons(iblPos, eventAverageComponents);
-                break;
-
-            case "grayscaleFR":
-                float4[] zeroColors = (float4[]) Enumerable.Repeat(new float4(0f, 0f, 0f, 0f), n).ToArray();
-                float4[] maxColors = (float4[]) Enumerable.Repeat(new float4(1f, 1f, 1f, 1f), n).ToArray();
-                nemanager.AddNeurons(iblPos, eventAverageComponents, zeroColors, maxColors);
-                break;
-
-            case "byRegionFR":
-                float4[] zeroRegionColors = new float4[n];
-                float4[] maxRegionColors = new float4[n];
-                for (int i = 0; i < n; i++)
-                {
-                    float3 pos = iblPos[i];
-                    //Debug.Log(pos.x);
-                    //Debug.Log((int)Math.Round(pos.x * 1000, 0));
-                    //Debug.Log(pos);
-                    // May have to convert from mlapdv -> apdvml, but let's test first
-                    int posId = annotationDataset.ValueAtIndex((int)Math.Round(pos.y * 1000 / 25, 0),
-                                                               (int)Math.Round(pos.z * 1000 / 25, 0),
-                                                               (int)Math.Round(pos.x * 1000 / 25, 0));
-                    Color posColor = ccfmodelcontrol.GetCCFAreaColor(posId);
-                    zeroRegionColors[i] = new float4(posColor.r, posColor.b, posColor.g, 0f);
-                    maxRegionColors[i] = new float4(posColor.r, posColor.b, posColor.g, 1f);
-                }
-                nemanager.AddNeurons(iblPos, eventAverageComponents, zeroRegionColors, maxRegionColors);
-                break;
-
-            default:
-                Debug.Log("Given mode is invalid");
-                break;
+            //for (int i = 0; i < nTimepoints; i++)
+            //{
+            //    float cScale = spikeRates[(ui * nTimepoints) + i] / 100f;
+            //    if (cScale > maxScale)
+            //        maxScale = cScale;
+            //    dataTexture.SetPixel(pos, i, new Color(cScale, 1f, 0f));
+            //}
+            uCoords[pos] = pos / (float)validIndexes.Count;
+            pos++;
         }
+        Debug.Log(maxScale);
+
+        //// Save Texture to be auto-loaded into shader
+        //AssetDatabase.CreateAsset(dataTexture, "Assets/Datasets/v2/dataTexture.asset");
+        //return;
+
+        // Set global shader property
+        //Shader.SetGlobalTexture("_ScaleTexture", dataTexture);
+
+        float4[] neuronColors = new float4[validMlapdv.Count];
+        for (int i = 0; i < validMlapdv.Count; i++)
+        {
+            int posId = annotationDataset.ValueAtIndex((int)Math.Round(validMlapdv[i].y * 1000 / 25, 0),
+                                                               (int)Math.Round(validMlapdv[i].z * 1000 / 25, 0),
+                                                               (int)Math.Round(validMlapdv[i].x * 1000 / 25, 0));
+            Color temp = ccfmodelcontrol.GetCCFAreaColor(posId);
+            neuronColors[i] = new float4(temp.r, temp.g, temp.b, 1f);
+        }
+
+        nemanager.AddNeurons(validMlapdv, neuronColors, uCoords);
 
         _expManager.Play();
     }

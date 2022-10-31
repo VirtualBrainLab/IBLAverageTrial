@@ -27,6 +27,7 @@ public class NeuronEntityManager : MonoBehaviour
     [SerializeField] private GameObject neuronRoot;
     [SerializeField] private Mesh neuronMesh;
     [SerializeField] private Material neuronMaterial;
+    [SerializeField] private Material neuronDataMaterial;
     [SerializeField] private float replayScale = 0.125f;
     [SerializeField] private float neuronScale = 0.015f;
     [SerializeField] private Utils util;
@@ -43,8 +44,8 @@ public class NeuronEntityManager : MonoBehaviour
     private float _currentMaxFiringRate;
 
     // Rendering
-    RenderMesh neuronRenderMesh;
-    AABB boundEdges;
+    private RenderMesh _neuronRenderMesh;
+    private RenderMesh _neuronDataRenderMesh;
     private float4 neuronDefaultColor = new float4(0.15f, 0.63f, 0f, 0.4f);
 
     // Tracking
@@ -54,12 +55,11 @@ public class NeuronEntityManager : MonoBehaviour
 
     void Awake()
     {
-
         neurons = new List<Entity>();
 
         eManager = World.DefaultGameObjectInjectionWorld.EntityManager;
 
-        neuronRenderMesh = new RenderMesh
+        _neuronRenderMesh = new RenderMesh
         {
             castShadows = UnityEngine.Rendering.ShadowCastingMode.Off,
             mesh = neuronMesh,
@@ -67,35 +67,20 @@ public class NeuronEntityManager : MonoBehaviour
             layer = 11,
             layerMask = 11
         };
-        boundEdges = neuronRenderMesh.mesh.bounds.ToAABB();
+
+        _neuronDataRenderMesh = new RenderMesh
+        {
+            castShadows = UnityEngine.Rendering.ShadowCastingMode.Off,
+            mesh = neuronMesh,
+            material = neuronDataMaterial,
+            layer = 11,
+            layerMask = 11
+        };
     }
 
     private void Start()
     {
         _currentMaxFiringRate = 100f;
-    }
-
-    private void Debug()
-    {
-        // NOTE: This loop will throw an error if there are any neurons without spiking components
-        // (e.g. when we're lerping)
-        /*if (debug)
-        {
-            List<float3> debugPos = new List<float3>();
-
-            for (int x = -5; x < 5; x++)
-            {
-                for (int y = -5; y < 5; y++)
-                {
-                    for (int z = -5; z < 5; z++)
-                    {
-                        debugPos.Add(new float3(x, y, z));
-                    }
-                }
-            }
-
-            AddNeurons(debugPos);
-        }*/
     }
 
     public bool UseScaleForSpiking()
@@ -144,7 +129,7 @@ public class NeuronEntityManager : MonoBehaviour
             eManager.SetComponentData(neuron, new Scale { Value = neuronScale });
             eManager.SetComponentData(neuron, new MaterialColor { Value = neuronDefaultColor });
             //eManager.SetComponentData(neuron, new RenderBounds { Value = boundEdges });
-            eManager.SetSharedComponentData(neuron, neuronRenderMesh);
+            eManager.SetSharedComponentData(neuron, _neuronRenderMesh);
 
             // Add the spiking component
             eManager.SetComponentData(neuron, new SpikingComponent { spiking = 0f });
@@ -194,7 +179,7 @@ public class NeuronEntityManager : MonoBehaviour
             eManager.SetComponentData(neuron, new Translation { Value = CCF2Transform(mlapdvCoords[i]) });
             eManager.SetComponentData(neuron, new Scale { Value = neuronScale });
             eManager.SetComponentData(neuron, new MaterialColor { Value = color });
-            eManager.SetSharedComponentData(neuron, neuronRenderMesh);
+            eManager.SetSharedComponentData(neuron, _neuronRenderMesh);
 
             // Add the spiking component
             eManager.SetComponentData(neuron, new SpikingComponent { spiking = 0f });
@@ -248,7 +233,7 @@ public class NeuronEntityManager : MonoBehaviour
             eManager.SetComponentData(neuron, new Translation { Value = CCF2Transform(mlapdvCoords[i]) });
             eManager.SetComponentData(neuron, new Scale { Value = neuronScale });
             eManager.SetComponentData(neuron, new MaterialColor { Value = color });
-            eManager.SetSharedComponentData(neuron, neuronRenderMesh);
+            eManager.SetSharedComponentData(neuron, _neuronRenderMesh);
 
             // Add the RF data
             eManager.SetComponentData(neuron, new SimRFComponent { rf_x = rfData[i].x, rf_y = rfData[i].y, rf_sigma = rfData[i].z });
@@ -292,7 +277,7 @@ public class NeuronEntityManager : MonoBehaviour
             Entity neuron = newNeurons[i];
             eManager.SetComponentData(neuron, new Translation { Value = CCF2Transform(mlapdv[i]) });
             eManager.SetComponentData(neuron, new Scale { Value = neuronScale });
-            eManager.SetSharedComponentData(neuron, neuronRenderMesh);
+            eManager.SetSharedComponentData(neuron, _neuronRenderMesh);
 
             // Add the spiking component
             eManager.SetComponentData(neuron, new SpikingComponent { spiking = 0f });
@@ -335,7 +320,7 @@ public class NeuronEntityManager : MonoBehaviour
             eManager.SetComponentData(neuron, new Translation { Value = CCF2Transform(mlapdv[i]) });
             eManager.SetComponentData(neuron, new Scale { Value = replayScale });
             eManager.SetComponentData(neuron, new MaterialColor { Value = color });
-            eManager.SetSharedComponentData(neuron, neuronRenderMesh);
+            eManager.SetSharedComponentData(neuron, _neuronRenderMesh);
 
             // Add the spiking component
             eManager.SetComponentData(neuron, new SpikingComponent { spiking = 0f });
@@ -371,7 +356,7 @@ public class NeuronEntityManager : MonoBehaviour
             eManager.SetComponentData(neuron, new Translation { Value = CCF2Transform(mlapdv[i]) });
             eManager.SetComponentData(neuron, new Scale { Value = replayScale });
             eManager.SetComponentData(neuron, new MaterialColor { Value = util.Color2float4(data[i]) });
-            eManager.SetSharedComponentData(neuron, neuronRenderMesh);
+            eManager.SetSharedComponentData(neuron, _neuronRenderMesh);
 
             // Add the ProbeAnimation component (keeps track of the lab)
             eManager.SetComponentData(neuron, new PAComponent { lab = labData[i] });
@@ -411,7 +396,7 @@ public class NeuronEntityManager : MonoBehaviour
                 eManager.SetComponentData(neuron, new PositionComponent { position = new float3(mlapdv[i]) });
                 eManager.SetComponentData(neuron, new Translation { Value = CCF2Transform(mlapdv[i]) });
                 eManager.SetComponentData(neuron, new Scale { Value = neuronScale });
-                eManager.SetSharedComponentData(neuron, neuronRenderMesh);
+                eManager.SetSharedComponentData(neuron, _neuronRenderMesh);
                 eManager.SetComponentData(neuron, new SpikingColorComponent { color = new float4(0f, 0f, 0f, 0.65f) });
 
                 eManager.SetComponentData(neuron, eventAverage[i]);
@@ -436,7 +421,7 @@ public class NeuronEntityManager : MonoBehaviour
             typeof(MaterialColor),
             typeof(LerpColorComponent),
             typeof(IBLEventAverageComponent),
-                typeof(PositionComponent)
+            typeof(PositionComponent)
             );
 
         int n = mlapdv.Count;
@@ -450,7 +435,7 @@ public class NeuronEntityManager : MonoBehaviour
             eManager.SetComponentData(neuron, new PositionComponent { position = new float3(mlapdv[i]) });
             eManager.SetComponentData(neuron, new Translation { Value = CCF2Transform(mlapdv[i]) });
             eManager.SetComponentData(neuron, new Scale { Value = neuronScale });
-            eManager.SetSharedComponentData(neuron, neuronRenderMesh);
+            eManager.SetSharedComponentData(neuron, _neuronRenderMesh);
             eManager.SetComponentData(neuron, new MaterialColor { Value = maxColorVals[i] });
             eManager.SetComponentData(neuron, eventAverage[i]);
             eManager.SetComponentData(neuron, new LerpColorComponent { zeroColor = zeroColorVals[i], maxColor = maxColorVals[i]} );
@@ -458,6 +443,49 @@ public class NeuronEntityManager : MonoBehaviour
             neurons.Add(neuron);
             returnList.Add(neuron);
         }
+
+        newNeurons.Dispose();
+        return returnList;
+    }
+
+    public List<Entity> AddNeurons(List<float3> mlapdv, float4[] colors, float[] uCoord)
+    {
+        Debug.Log(string.Format("Creating {0} neurons",mlapdv.Count));
+
+        EntityArchetype neuronArchetype = eManager.CreateArchetype(
+            typeof(Translation),
+            typeof(Scale),
+            typeof(LocalToWorld),
+            typeof(RenderMesh),
+            typeof(RenderBounds),
+            typeof(MaterialColor),
+            typeof(MaterialUCoord),
+            typeof(MaterialVCoord),
+            typeof(PositionComponent),
+            typeof(MaterialBrainScale)
+            );
+
+        int n = mlapdv.Count;
+
+        NativeArray<Entity> newNeurons = eManager.CreateEntity(neuronArchetype, n, Allocator.Temp);
+        List<Entity> returnList = new List<Entity>();
+
+        for (int i = 0; i < n; i++)
+        {
+            Entity neuron = newNeurons[i];
+            eManager.SetComponentData(neuron, new PositionComponent { position = new float3(mlapdv[i]) });
+            eManager.SetComponentData(neuron, new Translation { Value = CCF2Transform(mlapdv[i]) });
+            eManager.SetComponentData(neuron, new Scale { Value = neuronScale });
+            eManager.SetSharedComponentData(neuron, _neuronDataRenderMesh);
+            eManager.SetComponentData(neuron, new MaterialColor { Value = colors[i] });
+            eManager.SetComponentData(neuron, new MaterialUCoord { Value = uCoord[i] });
+            eManager.SetComponentData(neuron, new MaterialVCoord { Value = 0f });
+            eManager.SetComponentData(neuron, new MaterialBrainScale { Value = 1f });
+
+            neurons.Add(neuron);
+            returnList.Add(neuron);
+        }
+        Debug.Log("Created neurons");
 
         newNeurons.Dispose();
         return returnList;
