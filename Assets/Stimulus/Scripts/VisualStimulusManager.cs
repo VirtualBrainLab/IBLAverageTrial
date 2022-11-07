@@ -19,6 +19,8 @@ public class VisualStimulusManager : MonoBehaviour
 
     [SerializeField] private EventAverageManager eamanager;
 
+    [SerializeField] private GameObject gaborNoneGO;
+
     // DRAG VARS
     public Camera uiCam;
     public Camera stimCam;
@@ -49,9 +51,11 @@ public class VisualStimulusManager : MonoBehaviour
     private bool taskRunning;
 
     private GameObject debugStimulus;
+    private bool showStimulus;
 
     private void Awake()
     {
+        showStimulus = true;
         visualStimulusPrefabDict = new Dictionary<string, GameObject>();
         for (int i = 0; i < visualStimulusPrefabs.Count; i++)
         {
@@ -113,59 +117,59 @@ public class VisualStimulusManager : MonoBehaviour
         }
 
         // Test if the mouse is over any objects in the stimuli mask layer
-        Ray ray = uiCam.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray.origin, ray.direction, out RaycastHit hit, Mathf.Infinity, stimuliMask)) {
-            draggingStimulus = hit.collider.gameObject;
-            curVisStim = draggingStimulus.GetComponent<VisualStimulus>();
-            // If left click is pressed over the stimulus, record the current
-            // mouse and stim positions for later use when dragging
-            if (Input.GetMouseButtonDown(0)) {
-                if (Physics.Raycast(ray.origin, ray.direction, out RaycastHit planeHit, Mathf.Infinity, stimPlaneMask)) {
-                    initMousePos = planeHit.point;
-                    initStimPos = draggingStimulus.transform.position;
-                }
-                dragStart = true;
-            }
-        }
-        if (dragStart)
-        {
-            // If a drag was started, check that we haven't moved
-            if (Physics.Raycast(ray.origin, ray.direction, out RaycastHit planeHit, Mathf.Infinity, stimPlaneMask))
-            {
-                // Add the difference between initial mouse / stim positions
-                // so the stimulus doesn't move when clicked
-                Vector3 newStimPos = planeHit.point + (initStimPos - initMousePos);
+        //Ray ray = uiCam.ScreenPointToRay(Input.mousePosition);
+        //if (Physics.Raycast(ray.origin, ray.direction, out RaycastHit hit, Mathf.Infinity, stimuliMask)) {
+        //    draggingStimulus = hit.collider.gameObject;
+        //    curVisStim = draggingStimulus.GetComponent<VisualStimulus>();
+        //    // If left click is pressed over the stimulus, record the current
+        //    // mouse and stim positions for later use when dragging
+        //    if (Input.GetMouseButtonDown(0)) {
+        //        if (Physics.Raycast(ray.origin, ray.direction, out RaycastHit planeHit, Mathf.Infinity, stimPlaneMask)) {
+        //            initMousePos = planeHit.point;
+        //            initStimPos = draggingStimulus.transform.position;
+        //        }
+        //        dragStart = true;
+        //    }
+        //}
+        //if (dragStart)
+        //{
+        //    // If a drag was started, check that we haven't moved
+        //    if (Physics.Raycast(ray.origin, ray.direction, out RaycastHit planeHit, Mathf.Infinity, stimPlaneMask))
+        //    {
+        //        // Add the difference between initial mouse / stim positions
+        //        // so the stimulus doesn't move when clicked
+        //        Vector3 newStimPos = planeHit.point + (initStimPos - initMousePos);
 
-                if (!dragMoved)
-                {
-                    // We haven't actually moved, just see if we moved
-                    if (Vector3.Distance(initStimPos, newStimPos) > 1)
-                    {
-                        dragMoved = true;
-                        if (usingTooltip)
-                            curVisStim.HideTooltip();
-                    }
-                    else
-                    {
-                        // If we didn't move and left click is released, toggle the tooltip
-                        if (Input.GetMouseButtonUp(0))
-                        {
-                            curVisStim.Clicked();
-                        }
-                    }
-                }
-                else
-                {
-                    SetStimPosition(draggingStimulus, newStimPos);
-                    curVisStim.ComputeStimulusPosition();
-                }
-            }
-        }
-        // Stop dragging if left click is released at any time
-        if (Input.GetMouseButtonUp(0)) {
-            dragStart = false;
-            dragMoved = false;
-        }
+        //        if (!dragMoved)
+        //        {
+        //            // We haven't actually moved, just see if we moved
+        //            if (Vector3.Distance(initStimPos, newStimPos) > 1)
+        //            {
+        //                dragMoved = true;
+        //                if (usingTooltip)
+        //                    curVisStim.HideTooltip();
+        //            }
+        //            else
+        //            {
+        //                // If we didn't move and left click is released, toggle the tooltip
+        //                if (Input.GetMouseButtonUp(0))
+        //                {
+        //                    curVisStim.Clicked();
+        //                }
+        //            }
+        //        }
+        //        else
+        //        {
+        //            SetStimPosition(draggingStimulus, newStimPos);
+        //            curVisStim.ComputeStimulusPosition();
+        //        }
+        //    }
+        //}
+        //// Stop dragging if left click is released at any time
+        //if (Input.GetMouseButtonUp(0)) {
+        //    dragStart = false;
+        //    dragMoved = false;
+        //}
     }
 
     public bool SetStimPositionDegrees(GameObject stimulusObject, Vector2 degreePos)
@@ -208,11 +212,23 @@ public class VisualStimulusManager : MonoBehaviour
         }
     }
 
+    public void DisableStimulus()
+    {
+        showStimulus = false;
+    }
+
     /*
      * stimulusType refers to the index in the prefab list
      */
     public GameObject AddNewStimulus(string stimulusType)
     {
+        if (!showStimulus)
+        {
+            GameObject newStim = Instantiate(gaborNoneGO, stimPlane.transform);
+            newStim.transform.position += offsetVector;
+            return newStim;
+        }
+
         if (visualStimulusPrefabDict.ContainsKey(stimulusType))
         {
             // Spawn new object, parented to the stimPlane

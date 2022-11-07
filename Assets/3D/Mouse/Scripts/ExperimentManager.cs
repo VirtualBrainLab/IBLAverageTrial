@@ -39,8 +39,6 @@ public class ExperimentManager : MonoBehaviour
 
     void Awake()
     {
-        Time.timeScale = 0.125f;
-
         experiments = new List<Experiment>();
         experiments.Add(new IBLTask(vsmanager,audmanager,lickBehavior,wheelRotationBehavior, UIPanel));
     }
@@ -49,6 +47,11 @@ public class ExperimentManager : MonoBehaviour
     private void Start()
     {
         SetupUI();
+    }
+
+    public void DisableStimulus()
+    {
+        vsmanager.DisableStimulus();
     }
 
     // Update is called once per frame

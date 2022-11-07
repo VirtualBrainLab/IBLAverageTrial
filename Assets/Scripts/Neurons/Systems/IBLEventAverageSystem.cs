@@ -8,7 +8,7 @@ using Unity.Transforms;
 
 // Note that all systems that modify neuron color need this -- otherwise neuron color *could*
 // get reset on the same frame when the FPS is low
-[UpdateAfter(typeof(NeuronSpikingSystem))]
+//[UpdateAfter(typeof(NeuronSpikingSystem))]
 public partial class IBLEventAverageSystem : SystemBase
 {
     IBLTask iblTask;
@@ -28,6 +28,10 @@ public partial class IBLEventAverageSystem : SystemBase
 
     protected override void OnUpdate()
     {
+        // If materials are not transparent, skip rendering the brain
+        if (!eaManager.MaterialsTransparent)
+            return;
+
         //trialTimeIndex += 0.1f;
         float deltaTime = Time.DeltaTime;
         double curTime = Time.ElapsedTime;

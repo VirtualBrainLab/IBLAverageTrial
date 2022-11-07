@@ -48,6 +48,22 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     path: c57_bl6_rig/root/lumbar_vertebrae_1/lumbar_vertebrae_2/lumbar_vertebrae_3/thoracic_vertebrae_0/thoracic_vertebrae_1/thoracic_vertebrae_2/cervical_vertebrae_0/cervical_vertebrae_1/skull/mandible
+  - curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: {x: -13.674, y: 0.004, z: -0.013}
+        inSlope: {x: 0, y: 0, z: 0}
+        outSlope: {x: 0, y: 0, z: 0}
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
+        outWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    path: mouse/root/lumbar_vertebrae_1/lumbar_vertebrae_2/lumbar_vertebrae_3/thoracic_vertebrae_0/thoracic_vertebrae_1/thoracic_vertebrae_2/cervical_vertebrae_0/cervical_vertebrae_1/skull/mandible
   m_PositionCurves:
   - curve:
       serializedVersion: 2
@@ -108,6 +124,38 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     path: c57_bl6_rig/root/lumbar_vertebrae_1/lumbar_vertebrae_2/lumbar_vertebrae_3/thoracic_vertebrae_0/thoracic_vertebrae_1/thoracic_vertebrae_2/cervical_vertebrae_0/cervical_vertebrae_1/skull/mandible/tongue_base/tongue_tip
+  - curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: {x: -0.0000007777418, y: 0.0008390409, z: -0.00044592022}
+        inSlope: {x: 0, y: 0, z: 0}
+        outSlope: {x: 0, y: 0, z: 0}
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: {x: 0, y: 0.33333334, z: 0.33333334}
+        outWeight: {x: 0, y: 0.33333334, z: 0.33333334}
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    path: mouse/root/lumbar_vertebrae_1/lumbar_vertebrae_2/lumbar_vertebrae_3/thoracic_vertebrae_0/thoracic_vertebrae_1/thoracic_vertebrae_2/cervical_vertebrae_0/cervical_vertebrae_1/skull/mandible
+  - curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: {x: -0, y: -0.00021, z: -0.000153}
+        inSlope: {x: 0, y: 0, z: 0}
+        outSlope: {x: 0, y: 0, z: 0}
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
+        outWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    path: mouse/root/lumbar_vertebrae_1/lumbar_vertebrae_2/lumbar_vertebrae_3/thoracic_vertebrae_0/thoracic_vertebrae_1/thoracic_vertebrae_2/cervical_vertebrae_0/cervical_vertebrae_1/skull/mandible/tongue_base/tongue_tip
   m_ScaleCurves: []
   m_FloatCurves: []
   m_PPtrCurves: []
@@ -138,6 +186,27 @@ AnimationClip:
       script: {fileID: 0}
       typeID: 4
       customType: 0
+      isPPtrCurve: 0
+    - serializedVersion: 2
+      path: 3134219778
+      attribute: 1
+      script: {fileID: 0}
+      typeID: 4
+      customType: 0
+      isPPtrCurve: 0
+    - serializedVersion: 2
+      path: 1935445369
+      attribute: 1
+      script: {fileID: 0}
+      typeID: 4
+      customType: 0
+      isPPtrCurve: 0
+    - serializedVersion: 2
+      path: 3134219778
+      attribute: 4
+      script: {fileID: 0}
+      typeID: 4
+      customType: 4
       isPPtrCurve: 0
     pptrCurveMapping: []
   m_AnimationClipSettings:
@@ -467,6 +536,177 @@ AnimationClip:
     path: c57_bl6_rig/root/lumbar_vertebrae_1/lumbar_vertebrae_2/lumbar_vertebrae_3/thoracic_vertebrae_0/thoracic_vertebrae_1/thoracic_vertebrae_2/cervical_vertebrae_0/cervical_vertebrae_1/skull/mandible/tongue_base/tongue_tip
     classID: 4
     script: {fileID: 0}
+  - curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: -0.0000007777418
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: m_LocalPosition.x
+    path: mouse/root/lumbar_vertebrae_1/lumbar_vertebrae_2/lumbar_vertebrae_3/thoracic_vertebrae_0/thoracic_vertebrae_1/thoracic_vertebrae_2/cervical_vertebrae_0/cervical_vertebrae_1/skull/mandible
+    classID: 4
+    script: {fileID: 0}
+  - curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0.0008390409
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: m_LocalPosition.y
+    path: mouse/root/lumbar_vertebrae_1/lumbar_vertebrae_2/lumbar_vertebrae_3/thoracic_vertebrae_0/thoracic_vertebrae_1/thoracic_vertebrae_2/cervical_vertebrae_0/cervical_vertebrae_1/skull/mandible
+    classID: 4
+    script: {fileID: 0}
+  - curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: -0.00044592022
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: m_LocalPosition.z
+    path: mouse/root/lumbar_vertebrae_1/lumbar_vertebrae_2/lumbar_vertebrae_3/thoracic_vertebrae_0/thoracic_vertebrae_1/thoracic_vertebrae_2/cervical_vertebrae_0/cervical_vertebrae_1/skull/mandible
+    classID: 4
+    script: {fileID: 0}
+  - curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: -13.674
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: localEulerAnglesRaw.x
+    path: mouse/root/lumbar_vertebrae_1/lumbar_vertebrae_2/lumbar_vertebrae_3/thoracic_vertebrae_0/thoracic_vertebrae_1/thoracic_vertebrae_2/cervical_vertebrae_0/cervical_vertebrae_1/skull/mandible
+    classID: 4
+    script: {fileID: 0}
+  - curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0.004
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: localEulerAnglesRaw.y
+    path: mouse/root/lumbar_vertebrae_1/lumbar_vertebrae_2/lumbar_vertebrae_3/thoracic_vertebrae_0/thoracic_vertebrae_1/thoracic_vertebrae_2/cervical_vertebrae_0/cervical_vertebrae_1/skull/mandible
+    classID: 4
+    script: {fileID: 0}
+  - curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: -0.013
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: localEulerAnglesRaw.z
+    path: mouse/root/lumbar_vertebrae_1/lumbar_vertebrae_2/lumbar_vertebrae_3/thoracic_vertebrae_0/thoracic_vertebrae_1/thoracic_vertebrae_2/cervical_vertebrae_0/cervical_vertebrae_1/skull/mandible
+    classID: 4
+    script: {fileID: 0}
+  - curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: -0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: m_LocalPosition.x
+    path: mouse/root/lumbar_vertebrae_1/lumbar_vertebrae_2/lumbar_vertebrae_3/thoracic_vertebrae_0/thoracic_vertebrae_1/thoracic_vertebrae_2/cervical_vertebrae_0/cervical_vertebrae_1/skull/mandible/tongue_base/tongue_tip
+    classID: 4
+    script: {fileID: 0}
+  - curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: -0.00021
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: m_LocalPosition.y
+    path: mouse/root/lumbar_vertebrae_1/lumbar_vertebrae_2/lumbar_vertebrae_3/thoracic_vertebrae_0/thoracic_vertebrae_1/thoracic_vertebrae_2/cervical_vertebrae_0/cervical_vertebrae_1/skull/mandible/tongue_base/tongue_tip
+    classID: 4
+    script: {fileID: 0}
+  - curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: -0.000153
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: m_LocalPosition.z
+    path: mouse/root/lumbar_vertebrae_1/lumbar_vertebrae_2/lumbar_vertebrae_3/thoracic_vertebrae_0/thoracic_vertebrae_1/thoracic_vertebrae_2/cervical_vertebrae_0/cervical_vertebrae_1/skull/mandible/tongue_base/tongue_tip
+    classID: 4
+    script: {fileID: 0}
   m_EulerEditorCurves:
   - curve:
       serializedVersion: 2
@@ -496,6 +736,36 @@ AnimationClip:
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.x
     path: c57_bl6_rig/root/lumbar_vertebrae_1/lumbar_vertebrae_2/lumbar_vertebrae_3/thoracic_vertebrae_0/thoracic_vertebrae_1/thoracic_vertebrae_2/cervical_vertebrae_0/cervical_vertebrae_1/skull/mandible
+    classID: 4
+    script: {fileID: 0}
+  - curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: m_LocalEulerAngles.x
+    path: mouse/root/lumbar_vertebrae_1/lumbar_vertebrae_2/lumbar_vertebrae_3/thoracic_vertebrae_0/thoracic_vertebrae_1/thoracic_vertebrae_2/cervical_vertebrae_0/cervical_vertebrae_1/skull/mandible
+    classID: 4
+    script: {fileID: 0}
+  - curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: m_LocalEulerAngles.y
+    path: mouse/root/lumbar_vertebrae_1/lumbar_vertebrae_2/lumbar_vertebrae_3/thoracic_vertebrae_0/thoracic_vertebrae_1/thoracic_vertebrae_2/cervical_vertebrae_0/cervical_vertebrae_1/skull/mandible
+    classID: 4
+    script: {fileID: 0}
+  - curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: m_LocalEulerAngles.z
+    path: mouse/root/lumbar_vertebrae_1/lumbar_vertebrae_2/lumbar_vertebrae_3/thoracic_vertebrae_0/thoracic_vertebrae_1/thoracic_vertebrae_2/cervical_vertebrae_0/cervical_vertebrae_1/skull/mandible
     classID: 4
     script: {fileID: 0}
   m_HasGenericRootTransform: 0

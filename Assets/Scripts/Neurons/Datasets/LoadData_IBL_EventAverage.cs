@@ -14,7 +14,7 @@ public class LoadData_IBL_EventAverage : MonoBehaviour
     [SerializeField] private NeuronEntityManager nemanager;
     [SerializeField] private VolumeDatasetManager vdmanager;
 
-    [SerializeField] private ExperimentManager _expManager;
+    [SerializeField] private EventAverageManager _eventAverageManager;
 
     //[SerializeField] private AssetReference uuidListReference;
     //[SerializeField] private AssetReference dataReference;
@@ -31,7 +31,7 @@ public class LoadData_IBL_EventAverage : MonoBehaviour
     int[] side = { -1, -1, 1, 1 };
     int[] corr = { 1, -1, 1, -1 };
 
-    private float TIME_SCALE_FACTOR = 1f/125f;
+    private float TIME_SCALE_FACTOR = 0.0625f;
 
     public string displayMode = "spiking"; // Options: "spiking", "grayscaleFR, "byRegionFR"
 
@@ -50,11 +50,9 @@ public class LoadData_IBL_EventAverage : MonoBehaviour
         Debug.Log("Loading Event Average Data...");
         CCFAnnotationDataset annotationDataset = vdmanager.GetAnnotationDataset();
 
-        Debug.Log("1");
 
         Dictionary<string, IBLEventAverageComponent> eventAverageData = new Dictionary<string, IBLEventAverageComponent>();
 
-        Debug.Log("2");
 
         string uuidListFile = uuidListAsset.text;
         string[] uuidList = uuidListFile.Split(char.Parse(","));
@@ -67,16 +65,14 @@ public class LoadData_IBL_EventAverage : MonoBehaviour
 
         List<IBLEventAverageComponent> eventAverageComponents = new List<IBLEventAverageComponent>();
 
-        for (var ui = 0; ui < uuidList.Length; ui++)
+        for (var ui = 0; ui < uuidList.Length; ui+=5)
         {
             string uuid = uuidList[ui];
             FixedList4096Bytes<float> spikeRate = new FixedList4096Bytes<float>();
-            float sum = 0f;
 
             for (int i = 0; i < (SCALED_LEN * conditions); i++)
             {
-                spikeRate.AddNoResize(spikeRates[(ui * (SCALED_LEN * conditions)) + i] * TIME_SCALE_FACTOR);
-                sum += spikeRates[(ui * (SCALED_LEN * conditions)) + i];
+                spikeRate.AddNoResize(Mathf.Log(1f + spikeRates[(ui * (SCALED_LEN * conditions)) + i] * TIME_SCALE_FACTOR));
             }
 
             IBLEventAverageComponent eventAverageComponent = new IBLEventAverageComponent();
@@ -85,7 +81,6 @@ public class LoadData_IBL_EventAverage : MonoBehaviour
                 eventAverageData.Add(uuid, eventAverageComponent);
         }
 
-        Debug.Log("3");
         // load the UUID and MLAPDV data
         // load the UUID and MLAPDV data
 
@@ -104,7 +99,6 @@ public class LoadData_IBL_EventAverage : MonoBehaviour
             mlapdvData.Add(uuid, new float3(ml, ap, dv));
         }
 
-        Debug.Log("4");
         //spikeRateMap = util.LoadBinaryFloatHelper("ibl/1d_clu_avgs_map");
         //byte[] spikeRates = util.LoadBinaryByteHelper("ibl/1d_clu_avgs_uint8");
 
@@ -127,7 +121,6 @@ public class LoadData_IBL_EventAverage : MonoBehaviour
                 eventAverageComponents.Add(eventAverageData[uuid]);
             }
         }
-        Debug.Log("5");
 
         Debug.Log(string.Format("Number of neurons: {0}", eventAverageComponents.Count));
 
@@ -174,6 +167,6 @@ public class LoadData_IBL_EventAverage : MonoBehaviour
                 break;
         }
 
-        _expManager.Play();
+        _eventAverageManager.DoneLoadingCallback();
     }
 }
