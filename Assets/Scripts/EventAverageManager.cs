@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EventAverageManager : MonoBehaviour
 {
@@ -29,18 +30,23 @@ public class EventAverageManager : MonoBehaviour
     [SerializeField] private Animator _rigAnimator;
     [SerializeField] private NeuronEntityManager nemanager;
 
-    public float BrainScale { get { return _brainScale; } }
+    [SerializeField] private Slider indexSlider;
+
+    [SerializeField] private UpdateTrialPosPanel trialPositionPanel;
+
+    public bool standaloneMode = true;
+
+    public float brainScale { get { return _brainScale; } }
 
     private Dictionary<Renderer, Material> rendererDict;
 
-    private Camera mainCamera;
+    [SerializeField] private Camera mainCamera;
+    private IBLTask task;
 
     private void Awake()
     {
-        mainCamera = Camera.main;
-
+        _materialsTransparent = _useTransparentMaterials;
         rendererDict = new Dictionary<Renderer, Material>();
-        _materialsTransparent = false;
 
         foreach (Renderer renderer in rig.GetComponentsInChildren<Renderer>())
             if (!rendererDict.ContainsKey(renderer))
@@ -54,8 +60,10 @@ public class EventAverageManager : MonoBehaviour
     {
         modelControl.LateStart(true);
         LateStart();
-    }
 
+        task = _expManager.GetIBLTask();
+        SetTrialType(0);
+    }
     
 
     private async void LateStart()
@@ -66,6 +74,13 @@ public class EventAverageManager : MonoBehaviour
             node.SetNodeModelVisibility_Full(true);
 
         brainAreasT.localScale = Vector3.one / 2f;
+        _brainScale = 1f;
+    }
+
+    public void UpdateIndex(float indexPercentage)
+    {
+        //task.SetTimeIndex(Mathf.RoundToInt(indexSlider.value));
+        task.SetTimeIndex(Mathf.RoundToInt(indexPercentage * (trialDatasetType ? 250 : 100)));
     }
 
     public void ReplaceMaterials()
@@ -94,6 +109,8 @@ public class EventAverageManager : MonoBehaviour
 
     private void Update()
     {
+        brainModelT.localScale = new Vector3(_brainScale, _brainScale, _brainScale);
+
         //if (Input.GetKeyDown(KeyCode.T))
         //    _useTransparentMaterials = !_useTransparentMaterials;
 
@@ -103,27 +120,26 @@ public class EventAverageManager : MonoBehaviour
         //if (Input.GetKeyDown(KeyCode.Minus))
         //    _brainScale--;
 
-        if (_useTransparentMaterials && !_materialsTransparent)
-            ReplaceMaterials();
+        if (!standaloneMode)
+        {
+            if (_useTransparentMaterials && !_materialsTransparent)
+                ReplaceMaterials();
 
-        if (!_useTransparentMaterials && _materialsTransparent)
-            RecoverMaterials();
+            if (!_useTransparentMaterials && _materialsTransparent)
+                RecoverMaterials();
 
-        if (_materialsTransparent)
-            foreach (Renderer renderer in rendererDict.Keys)
-            {
-                Color col = renderer.material.color;
-                col.a = _rigTransparency;
-                renderer.material.color = col;
-            }
-
-        brainModelT.localScale = new Vector3(_brainScale, _brainScale, _brainScale);
+            if (_materialsTransparent)
+                foreach (Renderer renderer in rendererDict.Keys)
+                {
+                    Color col = renderer.material.color;
+                    col.a = _rigTransparency;
+                    renderer.material.color = col;
+                }
 
 
-        if (Input.GetKeyDown(KeyCode.R))
-            Launch();
-
-        // If the distance between the player and the brain is < some value, blank out the mouse, then expand the brain slowly
+            if (Input.GetKeyDown(KeyCode.R))
+                Launch();
+        }
     }
 
 
@@ -203,4 +219,59 @@ public class EventAverageManager : MonoBehaviour
     {
         return Time.realtimeSinceStartup - startTime;
     }
+
+    #region standalone features
+    public int trialType { get; private set; }
+    public void SetTrialType(int trialType)
+    {
+        this.trialType = trialType;
+        UpdateTrialUI();
+    }
+
+    private void UpdateTrialUI()
+    {
+        if (trialDatasetType)
+        {
+            trialPositionPanel.UpdateTextPositions(IBLTask.eventIdxsByType[trialType][0],
+                IBLTask.eventIdxsByType[trialType][1],
+                IBLTask.eventIdxsByType[trialType][2],
+                250);
+        }
+        else
+        {
+            // this depends on what data is being displayed
+            if (trialDatasetIndex == 2)
+                trialPositionPanel.UpdateTextPositions(50,
+                    -1,
+                    -1,
+                    100);
+            else if (trialDatasetIndex == 3)
+                trialPositionPanel.UpdateTextPositions(-1,
+                    50,
+                    -1,
+                    100);
+            else if (trialDatasetIndex == 4)
+                trialPositionPanel.UpdateTextPositions(-1,
+                    -1,
+                    50,
+                    100);
+        }
+    }
+
+    public bool trialDatasetType { get; private set; }
+
+    public void SetDatasetType(bool newType)
+    {
+        trialDatasetType = newType;
+    }
+
+    public int trialDatasetIndex { get; private set; }
+
+    public void SetDatasetIndex(int newIndex)
+    {
+        trialDatasetIndex = newIndex;
+        UpdateTrialUI();
+    }
+
+    #endregion
 }

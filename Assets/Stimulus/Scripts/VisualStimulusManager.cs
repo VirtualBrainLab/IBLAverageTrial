@@ -72,19 +72,19 @@ public class VisualStimulusManager : MonoBehaviour
         }
 
         // Tooltip
-        if (visStimTooltip)
-        {
-            visStimTooltip.SetActive(false);
-            usingTooltip = true;
-        }
-        else
-        {
-            usingTooltip = false;
-        }
+        //if (visStimTooltip)
+        //{
+        //    visStimTooltip.SetActive(false);
+        //    usingTooltip = true;
+        //}
+        //else
+        //{
+        //    usingTooltip = false;
+        //}
 
-        // DRAG CODE
-        if (uiCam == null) { uiCam = GameObject.Find("UICamera").GetComponent<Camera>(); }
-        offsetVector = Vector3.forward * 0.01f;
+        //// DRAG CODE
+        //if (uiCam == null) { uiCam = GameObject.Find("UICamera").GetComponent<Camera>(); }
+        //offsetVector = Vector3.forward * 0.01f;
     }
 
     // Update is called once per frame

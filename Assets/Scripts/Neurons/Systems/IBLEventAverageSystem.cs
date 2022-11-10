@@ -16,6 +16,9 @@ public partial class IBLEventAverageSystem : SystemBase
     private NeuronEntityManager nemanager;
     private EventAverageManager eaManager;
 
+    private int[] trialIdxsFull = { 0, 250, 500, 750 };
+    private int[] trialIdxsPSTH = { 0, 100, 200, 300 };
+
     float prevBrainScale = 1f;
 
     protected override void OnStartRunning()
@@ -32,60 +35,77 @@ public partial class IBLEventAverageSystem : SystemBase
         if (!eaManager.MaterialsTransparent)
             return;
 
-        //trialTimeIndex += 0.1f;
-        float deltaTime = Time.DeltaTime;
-        double curTime = Time.ElapsedTime;
-        bool corr = iblTask.GetCorrect();
-        int curIndex = iblTask.GetTimeIndex();
-        float smallScale = nemanager.GetNeuronScale();
+        float brainScaleRaw = eaManager.brainScale;
+        float brainScale = 0.0625f * brainScaleRaw;
 
-        float brainScaleRaw = eaManager.BrainScale;
-        float brainScale = 0.0625f * eaManager.BrainScale;
-
-        int trialStartIdx;
-        if (iblTask.GetSide() == -1)
+        if (eaManager.standaloneMode)
         {
-            trialStartIdx = corr ? 0 : 250;
+            int curIndex = iblTask.GetTimeIndex();
+
+            int trialStartIdx = eaManager.trialDatasetType? trialIdxsFull[eaManager.trialType] : trialIdxsPSTH[eaManager.trialType];
+
+            curIndex += trialStartIdx;
+
+            // Update lerping neurons
+            Entities
+                .ForEach((ref Scale scale, in IBLEventAverageComponent eventAverage) =>
+                {
+                    scale.Value = eventAverage.spikeRate[curIndex] * brainScale;
+                }).ScheduleParallel(); // .Run();
         }
         else
-        {
-            trialStartIdx = corr ? 500 : 750;
-        }
-        curIndex += trialStartIdx;
-        float curIndexPerc = curIndex / 999f;
+        {        //trialTimeIndex += 0.1f;
+            float deltaTime = Time.DeltaTime;
+            double curTime = Time.ElapsedTime;
+            bool corr = iblTask.GetCorrect();
+            int curIndex = iblTask.GetTimeIndex();
+            float smallScale = nemanager.GetNeuronScale();
 
-        // check for scale change
-        if (brainScale != prevBrainScale)
-        {
-            prevBrainScale = brainScale;
+            int trialStartIdx;
+            if (iblTask.GetSide() == -1)
+            {
+                trialStartIdx = corr ? 0 : 250;
+            }
+            else
+            {
+                trialStartIdx = corr ? 500 : 750;
+            }
+            curIndex += trialStartIdx;
+            float curIndexPerc = curIndex / 999f;
 
-            // Update neurons
+            // check for scale change
+            if (brainScale != prevBrainScale)
+            {
+                prevBrainScale = brainScale;
+
+                // Update neurons
+                Entities
+                    .ForEach((ref Translation pos, ref Scale scale, in PositionComponent origPos) =>
+                    {
+                        pos.Value = new float3(5.7f - origPos.position.x, 4 - origPos.position.z, origPos.position.y - 6.6f) * brainScaleRaw;
+                        scale.Value = 0.015f * brainScaleRaw;
+                    }).ScheduleParallel();
+            }
+
+            // Update lerping neurons
             Entities
-                .ForEach((ref Translation pos, ref Scale scale, in PositionComponent origPos) =>
+                .ForEach((ref Scale scale, in IBLEventAverageComponent eventAverage) =>
                 {
-                    pos.Value = new float3(5.7f - origPos.position.x, 4 - origPos.position.z, origPos.position.y - 6.6f) * brainScaleRaw;
-                    scale.Value = 0.015f * brainScaleRaw;
+                    //float4 maxFRColor = lerpColor.maxColor;
+                    //float4 zeroFRColor = lerpColor.zeroColor;
+                    float curPercent = eventAverage.spikeRate[curIndex];
+                    //color.Value = new float4(Mathf.Lerp(zeroFRColor.x, maxFRColor.x, curPercent),
+                    //                         Mathf.Lerp(zeroFRColor.y, maxFRColor.y, curPercent),
+                    //                         Mathf.Lerp(zeroFRColor.z, maxFRColor.z, curPercent),
+                    //                         Mathf.Lerp(zeroFRColor.w, maxFRColor.w, curPercent));
+                    scale.Value = 0.01f + curPercent * brainScale;
+                }).ScheduleParallel(); // .Run();
+
+            Entities
+                .ForEach((ref MaterialVCoord vCoord) =>
+                {
+                    vCoord.Value = curIndexPerc;
                 }).ScheduleParallel();
         }
-
-        // Update lerping neurons
-        Entities
-            .ForEach((ref Scale scale, in IBLEventAverageComponent eventAverage) =>
-            {
-                //float4 maxFRColor = lerpColor.maxColor;
-                //float4 zeroFRColor = lerpColor.zeroColor;
-                float curPercent = eventAverage.spikeRate[curIndex];
-                //color.Value = new float4(Mathf.Lerp(zeroFRColor.x, maxFRColor.x, curPercent),
-                //                         Mathf.Lerp(zeroFRColor.y, maxFRColor.y, curPercent),
-                //                         Mathf.Lerp(zeroFRColor.z, maxFRColor.z, curPercent),
-                //                         Mathf.Lerp(zeroFRColor.w, maxFRColor.w, curPercent));
-                scale.Value = 0.01f + curPercent * brainScale;
-            }).ScheduleParallel(); // .Run();
-
-        Entities
-            .ForEach((ref MaterialVCoord vCoord) =>
-            {
-                vCoord.Value = curIndexPerc;
-            }).ScheduleParallel();
     }
 }

@@ -4,26 +4,11 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - MinPanels
-  - PanelLabels
-  - Stimulus
-  - StimWindow
   - BrainImage
-  - SpikesPlot
-  - ElectrodeSite
-  - ProbeModel
-  - Probe
-  - Neuron
-  - BrainRoot
-  - TooltipCanvas
   - UIDraggable
+  - MainBrain
   - BrainRegion
-  - OntologyToggle
-  - VideoWindow
-  - ProbePanel
-  - ProbeAreaText
-  - BrainRotatorMiniControls
-  - AreaPanel
+  - PositionPanel
   layers:
   - Default
   - TransparentFX

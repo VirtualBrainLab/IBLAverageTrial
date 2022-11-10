@@ -130,7 +130,7 @@ public class LoadData_IBL_EventAverage_Data : MonoBehaviour
             neuronColors[i] = new float4(temp.r, temp.g, temp.b, 1f);
         }
 
-        nemanager.AddNeurons(validMlapdv, neuronColors, uCoords);
+        //nemanager.AddNeurons(validMlapdv, neuronColors, uCoords);
 
         _expManager.Play();
     }

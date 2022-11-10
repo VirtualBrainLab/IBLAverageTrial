@@ -147,229 +147,229 @@ public class NeuronEntityManager : MonoBehaviour
     /**
      * Add neurons while keeping track of their mlapdv coordinates, option to set neuron color based on their mlapdv coordinate
      */
-    public List<Entity> AddNeurons(List<float3> mlapdvCoords, List<int3> apdvlr)
-    {
-        EntityArchetype neuronArchetype = eManager.CreateArchetype(
-            typeof(Translation),
-            typeof(Scale),
-            typeof(LocalToWorld),
-            typeof(RenderMesh),
-            typeof(RenderBounds),
-            typeof(MaterialColor),
-            typeof(SpikingComponent),
-            typeof(SpikingColorComponent),
-            typeof(SpikingRandomComponent),
-            typeof(SimulatedNeuronComponent)
-            );
+    //public List<Entity> AddNeurons(List<float3> mlapdvCoords, List<int3> apdvlr)
+    //{
+    //    EntityArchetype neuronArchetype = eManager.CreateArchetype(
+    //        typeof(Translation),
+    //        typeof(Scale),
+    //        typeof(LocalToWorld),
+    //        typeof(RenderMesh),
+    //        typeof(RenderBounds),
+    //        typeof(MaterialColor),
+    //        typeof(SpikingComponent),
+    //        typeof(SpikingColorComponent),
+    //        typeof(SpikingRandomComponent),
+    //        typeof(SimulatedNeuronComponent)
+    //        );
 
-        NativeArray<Entity> newNeurons = eManager.CreateEntity(neuronArchetype, mlapdvCoords.Count, Allocator.Temp);
-        List<Entity> returnList = new List<Entity>();
+    //    NativeArray<Entity> newNeurons = eManager.CreateEntity(neuronArchetype, mlapdvCoords.Count, Allocator.Temp);
+    //    List<Entity> returnList = new List<Entity>();
 
-        _currentNeuronScale = neuronScale;
+    //    _currentNeuronScale = neuronScale;
 
-        for (int i = 0; i < mlapdvCoords.Count; i++)
-        {
-            // Calculate what area we are in and get the color
-            float annotation = vdmanager.GetAnnotationDataset().ValueAtIndex(apdvlr[i].x, apdvlr[i].y, apdvlr[i].z);
-            Color neuronColor = ccfmodelcontrol.GetCCFAreaColorMinDepth((int)annotation);
-            //Debug.Log("Neuron at " + apdvlr[i] + "in: " + annotation + " with color " + neuronColor);
-            float4 color = new float4(neuronColor.r, neuronColor.g, neuronColor.b, 0.4f);
+    //    for (int i = 0; i < mlapdvCoords.Count; i++)
+    //    {
+    //        // Calculate what area we are in and get the color
+    //        float annotation = vdmanager.GetAnnotationDataset().ValueAtIndex(apdvlr[i].x, apdvlr[i].y, apdvlr[i].z);
+    //        Color neuronColor = ccfmodelcontrol.GetCCFAreaColorMinDepth((int)annotation);
+    //        //Debug.Log("Neuron at " + apdvlr[i] + "in: " + annotation + " with color " + neuronColor);
+    //        float4 color = new float4(neuronColor.r, neuronColor.g, neuronColor.b, 0.4f);
 
-            Entity neuron = newNeurons[i];
-            eManager.SetComponentData(neuron, new Translation { Value = CCF2Transform(mlapdvCoords[i]) });
-            eManager.SetComponentData(neuron, new Scale { Value = neuronScale });
-            eManager.SetComponentData(neuron, new MaterialColor { Value = color });
-            eManager.SetSharedComponentData(neuron, _neuronRenderMesh);
+    //        Entity neuron = newNeurons[i];
+    //        eManager.SetComponentData(neuron, new Translation { Value = CCF2Transform(mlapdvCoords[i]) });
+    //        eManager.SetComponentData(neuron, new Scale { Value = neuronScale });
+    //        eManager.SetComponentData(neuron, new MaterialColor { Value = color });
+    //        eManager.SetSharedComponentData(neuron, _neuronRenderMesh);
 
-            // Add the spiking component
-            eManager.SetComponentData(neuron, new SpikingComponent { spiking = 0f });
-            eManager.SetComponentData(neuron, new SpikingColorComponent { color = color });
-            eManager.SetComponentData(neuron, NewSpikingRandomComponent());
+    //        // Add the spiking component
+    //        eManager.SetComponentData(neuron, new SpikingComponent { spiking = 0f });
+    //        eManager.SetComponentData(neuron, new SpikingColorComponent { color = color });
+    //        eManager.SetComponentData(neuron, NewSpikingRandomComponent());
 
-            // Track the coordinates
-            eManager.SetComponentData(neuron, new SimulatedNeuronComponent { apdvlr = mlapdvCoords[i] });
+    //        // Track the coordinates
+    //        eManager.SetComponentData(neuron, new SimulatedNeuronComponent { apdvlr = mlapdvCoords[i] });
 
-            neurons.Add(neuron);
-            returnList.Add(neuron);
-        }
+    //        neurons.Add(neuron);
+    //        returnList.Add(neuron);
+    //    }
 
-        newNeurons.Dispose();
-        return returnList;
-    }
+    //    newNeurons.Dispose();
+    //    return returnList;
+    //}
 
     /**
      * Add neurons with receptive field data
      */
-    public List<Entity> AddNeurons(List<float3> mlapdvCoords, List<int3> apdvlr, List<float3> rfData)
-    {
-        EntityArchetype neuronArchetype = eManager.CreateArchetype(
-            typeof(Translation),
-            typeof(Scale),
-            typeof(LocalToWorld),
-            typeof(RenderMesh),
-            typeof(RenderBounds),
-            typeof(MaterialColor),
-            typeof(SpikingComponent),
-            typeof(SpikingColorComponent),
-            typeof(SpikingRandomComponent),
-            typeof(SimulatedNeuronComponent),
-            typeof(SimRFComponent)
-            );
+    //public List<Entity> AddNeurons(List<float3> mlapdvCoords, List<int3> apdvlr, List<float3> rfData)
+    //{
+    //    EntityArchetype neuronArchetype = eManager.CreateArchetype(
+    //        typeof(Translation),
+    //        typeof(Scale),
+    //        typeof(LocalToWorld),
+    //        typeof(RenderMesh),
+    //        typeof(RenderBounds),
+    //        typeof(MaterialColor),
+    //        typeof(SpikingComponent),
+    //        typeof(SpikingColorComponent),
+    //        typeof(SpikingRandomComponent),
+    //        typeof(SimulatedNeuronComponent),
+    //        typeof(SimRFComponent)
+    //        );
 
-        NativeArray<Entity> newNeurons = eManager.CreateEntity(neuronArchetype, mlapdvCoords.Count, Allocator.Temp);
-        List<Entity> returnList = new List<Entity>();
+    //    NativeArray<Entity> newNeurons = eManager.CreateEntity(neuronArchetype, mlapdvCoords.Count, Allocator.Temp);
+    //    List<Entity> returnList = new List<Entity>();
 
-        _currentNeuronScale = neuronScale;
+    //    _currentNeuronScale = neuronScale;
 
-        for (int i = 0; i < mlapdvCoords.Count; i++)
-        {
-            // Calculate what area we are in and get the color
-            float annotation = vdmanager.GetAnnotationDataset().ValueAtIndex(apdvlr[i].x, apdvlr[i].y, apdvlr[i].z);
-            Color neuronColor = ccfmodelcontrol.GetCCFAreaColorMinDepth((int)annotation);
-            //Debug.Log("Neuron at " + apdvlr[i] + "in: " + annotation + " with color " + neuronColor);
-            float4 color = new float4(neuronColor.r, neuronColor.g, neuronColor.b, 0.4f);
+    //    for (int i = 0; i < mlapdvCoords.Count; i++)
+    //    {
+    //        // Calculate what area we are in and get the color
+    //        float annotation = vdmanager.GetAnnotationDataset().ValueAtIndex(apdvlr[i].x, apdvlr[i].y, apdvlr[i].z);
+    //        Color neuronColor = ccfmodelcontrol.GetCCFAreaColorMinDepth((int)annotation);
+    //        //Debug.Log("Neuron at " + apdvlr[i] + "in: " + annotation + " with color " + neuronColor);
+    //        float4 color = new float4(neuronColor.r, neuronColor.g, neuronColor.b, 0.4f);
 
-            Entity neuron = newNeurons[i];
-            eManager.SetComponentData(neuron, new Translation { Value = CCF2Transform(mlapdvCoords[i]) });
-            eManager.SetComponentData(neuron, new Scale { Value = neuronScale });
-            eManager.SetComponentData(neuron, new MaterialColor { Value = color });
-            eManager.SetSharedComponentData(neuron, _neuronRenderMesh);
+    //        Entity neuron = newNeurons[i];
+    //        eManager.SetComponentData(neuron, new Translation { Value = CCF2Transform(mlapdvCoords[i]) });
+    //        eManager.SetComponentData(neuron, new Scale { Value = neuronScale });
+    //        eManager.SetComponentData(neuron, new MaterialColor { Value = color });
+    //        eManager.SetSharedComponentData(neuron, _neuronRenderMesh);
 
-            // Add the RF data
-            eManager.SetComponentData(neuron, new SimRFComponent { rf_x = rfData[i].x, rf_y = rfData[i].y, rf_sigma = rfData[i].z });
+    //        // Add the RF data
+    //        eManager.SetComponentData(neuron, new SimRFComponent { rf_x = rfData[i].x, rf_y = rfData[i].y, rf_sigma = rfData[i].z });
 
-            // Add the spiking component
-            eManager.SetComponentData(neuron, new SpikingComponent { spiking = 0f });
-            eManager.SetComponentData(neuron, new SpikingColorComponent { color = color });
-            eManager.SetComponentData(neuron, NewSpikingRandomComponent());
+    //        // Add the spiking component
+    //        eManager.SetComponentData(neuron, new SpikingComponent { spiking = 0f });
+    //        eManager.SetComponentData(neuron, new SpikingColorComponent { color = color });
+    //        eManager.SetComponentData(neuron, NewSpikingRandomComponent());
 
-            // Track the coordinates
-            eManager.SetComponentData(neuron, new SimulatedNeuronComponent { apdvlr = mlapdvCoords[i] });
+    //        // Track the coordinates
+    //        eManager.SetComponentData(neuron, new SimulatedNeuronComponent { apdvlr = mlapdvCoords[i] });
 
-            neurons.Add(neuron);
-            returnList.Add(neuron);
-        }
+    //        neurons.Add(neuron);
+    //        returnList.Add(neuron);
+    //    }
 
-        newNeurons.Dispose();
-        return returnList;
-    }
+    //    newNeurons.Dispose();
+    //    return returnList;
+    //}
 
-    public List<Entity> AddNeurons(List<float3> mlapdv, List<IBLGLMComponent> data)
-    {
-        EntityArchetype neuronArchetype = eManager.CreateArchetype(
-            typeof(IBLGLMComponent),
-            typeof(Translation),
-            typeof(Scale),
-            typeof(LocalToWorld),
-            typeof(RenderMesh),
-            typeof(RenderBounds),
-            typeof(MaterialColor),
-            typeof(SpikingComponent),
-            typeof(SpikingColorComponent),
-            typeof(SpikingRandomComponent)
-            );
+    //public List<Entity> AddNeurons(List<float3> mlapdv, List<IBLGLMComponent> data)
+    //{
+    //    EntityArchetype neuronArchetype = eManager.CreateArchetype(
+    //        typeof(IBLGLMComponent),
+    //        typeof(Translation),
+    //        typeof(Scale),
+    //        typeof(LocalToWorld),
+    //        typeof(RenderMesh),
+    //        typeof(RenderBounds),
+    //        typeof(MaterialColor),
+    //        typeof(SpikingComponent),
+    //        typeof(SpikingColorComponent),
+    //        typeof(SpikingRandomComponent)
+    //        );
 
-        NativeArray<Entity> newNeurons = eManager.CreateEntity(neuronArchetype, mlapdv.Count, Allocator.Temp);
-        List<Entity> returnList = new List<Entity>();
+    //    NativeArray<Entity> newNeurons = eManager.CreateEntity(neuronArchetype, mlapdv.Count, Allocator.Temp);
+    //    List<Entity> returnList = new List<Entity>();
 
-        for (int i = 0; i < mlapdv.Count; i++)
-        {
-            Entity neuron = newNeurons[i];
-            eManager.SetComponentData(neuron, new Translation { Value = CCF2Transform(mlapdv[i]) });
-            eManager.SetComponentData(neuron, new Scale { Value = neuronScale });
-            eManager.SetSharedComponentData(neuron, _neuronRenderMesh);
+    //    for (int i = 0; i < mlapdv.Count; i++)
+    //    {
+    //        Entity neuron = newNeurons[i];
+    //        eManager.SetComponentData(neuron, new Translation { Value = CCF2Transform(mlapdv[i]) });
+    //        eManager.SetComponentData(neuron, new Scale { Value = neuronScale });
+    //        eManager.SetSharedComponentData(neuron, _neuronRenderMesh);
 
-            // Add the spiking component
-            eManager.SetComponentData(neuron, new SpikingComponent { spiking = 0f });
-            eManager.SetComponentData(neuron, new SpikingColorComponent { color = neuronDefaultColor });
-            eManager.SetComponentData(neuron, NewSpikingRandomComponent());
+    //        // Add the spiking component
+    //        eManager.SetComponentData(neuron, new SpikingComponent { spiking = 0f });
+    //        eManager.SetComponentData(neuron, new SpikingColorComponent { color = neuronDefaultColor });
+    //        eManager.SetComponentData(neuron, NewSpikingRandomComponent());
 
-            // Add the NeuronDataComponent
-            eManager.SetComponentData(neuron, data[i]);
+    //        // Add the NeuronDataComponent
+    //        eManager.SetComponentData(neuron, data[i]);
 
-            neurons.Add(neuron);
-            returnList.Add(neuron);
-        }
+    //        neurons.Add(neuron);
+    //        returnList.Add(neuron);
+    //    }
 
-        newNeurons.Dispose();
-        return returnList;
-    }
+    //    newNeurons.Dispose();
+    //    return returnList;
+    //}
 
-    public List<Entity> AddNeurons(List<float3> mlapdv, List<Color> data)
-    {
-        EntityArchetype neuronArchetype = eManager.CreateArchetype(
-            typeof(Translation),
-            typeof(Scale),
-            typeof(LocalToWorld),
-            typeof(RenderMesh),
-            typeof(RenderBounds),
-            typeof(MaterialColor),
-            typeof(SpikingComponent),
-            typeof(SpikingColorComponent)
-            );
+    //public List<Entity> AddNeurons(List<float3> mlapdv, List<Color> data)
+    //{
+    //    EntityArchetype neuronArchetype = eManager.CreateArchetype(
+    //        typeof(Translation),
+    //        typeof(Scale),
+    //        typeof(LocalToWorld),
+    //        typeof(RenderMesh),
+    //        typeof(RenderBounds),
+    //        typeof(MaterialColor),
+    //        typeof(SpikingComponent),
+    //        typeof(SpikingColorComponent)
+    //        );
 
-        NativeArray<Entity> newNeurons = eManager.CreateEntity(neuronArchetype, mlapdv.Count, Allocator.Temp);
-        List<Entity> returnList = new List<Entity>();
+    //    NativeArray<Entity> newNeurons = eManager.CreateEntity(neuronArchetype, mlapdv.Count, Allocator.Temp);
+    //    List<Entity> returnList = new List<Entity>();
 
-        for (int i = 0; i < mlapdv.Count; i++)
-        {
-            Entity neuron = newNeurons[i];
-            float4 color = util.Color2float4(data[i]);
+    //    for (int i = 0; i < mlapdv.Count; i++)
+    //    {
+    //        Entity neuron = newNeurons[i];
+    //        float4 color = util.Color2float4(data[i]);
 
-            // Add the required position and render components
-            eManager.SetComponentData(neuron, new Translation { Value = CCF2Transform(mlapdv[i]) });
-            eManager.SetComponentData(neuron, new Scale { Value = replayScale });
-            eManager.SetComponentData(neuron, new MaterialColor { Value = color });
-            eManager.SetSharedComponentData(neuron, _neuronRenderMesh);
+    //        // Add the required position and render components
+    //        eManager.SetComponentData(neuron, new Translation { Value = CCF2Transform(mlapdv[i]) });
+    //        eManager.SetComponentData(neuron, new Scale { Value = replayScale });
+    //        eManager.SetComponentData(neuron, new MaterialColor { Value = color });
+    //        eManager.SetSharedComponentData(neuron, _neuronRenderMesh);
 
-            // Add the spiking component
-            eManager.SetComponentData(neuron, new SpikingComponent { spiking = 0f });
-            eManager.SetComponentData(neuron, new SpikingColorComponent { color = color });
+    //        // Add the spiking component
+    //        eManager.SetComponentData(neuron, new SpikingComponent { spiking = 0f });
+    //        eManager.SetComponentData(neuron, new SpikingColorComponent { color = color });
 
-            neurons.Add(neuron);
-            returnList.Add(neuron);
-        }
+    //        neurons.Add(neuron);
+    //        returnList.Add(neuron);
+    //    }
 
-        newNeurons.Dispose();
-        return returnList;
-    }
+    //    newNeurons.Dispose();
+    //    return returnList;
+    //}
 
-    public List<Entity> AddNeurons(List<float3> mlapdv, List<Color> data, List<int> labData)
-    {
-        EntityArchetype neuronArchetype = eManager.CreateArchetype(
-            typeof(Translation),
-            typeof(Scale),
-            typeof(LocalToWorld),
-            typeof(RenderMesh),
-            typeof(RenderBounds),
-            typeof(MaterialColor),
-            typeof(PAComponent)
-            );
+    //public List<Entity> AddNeurons(List<float3> mlapdv, List<Color> data, List<int> labData)
+    //{
+    //    EntityArchetype neuronArchetype = eManager.CreateArchetype(
+    //        typeof(Translation),
+    //        typeof(Scale),
+    //        typeof(LocalToWorld),
+    //        typeof(RenderMesh),
+    //        typeof(RenderBounds),
+    //        typeof(MaterialColor),
+    //        typeof(PAComponent)
+    //        );
 
-        NativeArray<Entity> newNeurons = eManager.CreateEntity(neuronArchetype, mlapdv.Count, Allocator.Temp);
-        List<Entity> returnList = new List<Entity>();
+    //    NativeArray<Entity> newNeurons = eManager.CreateEntity(neuronArchetype, mlapdv.Count, Allocator.Temp);
+    //    List<Entity> returnList = new List<Entity>();
 
-        for (int i = 0; i < mlapdv.Count; i++)
-        {
-            Entity neuron = newNeurons[i];
-            // Add the required position and render components
-            eManager.SetComponentData(neuron, new Translation { Value = CCF2Transform(mlapdv[i]) });
-            eManager.SetComponentData(neuron, new Scale { Value = replayScale });
-            eManager.SetComponentData(neuron, new MaterialColor { Value = util.Color2float4(data[i]) });
-            eManager.SetSharedComponentData(neuron, _neuronRenderMesh);
+    //    for (int i = 0; i < mlapdv.Count; i++)
+    //    {
+    //        Entity neuron = newNeurons[i];
+    //        // Add the required position and render components
+    //        eManager.SetComponentData(neuron, new Translation { Value = CCF2Transform(mlapdv[i]) });
+    //        eManager.SetComponentData(neuron, new Scale { Value = replayScale });
+    //        eManager.SetComponentData(neuron, new MaterialColor { Value = util.Color2float4(data[i]) });
+    //        eManager.SetSharedComponentData(neuron, _neuronRenderMesh);
 
-            // Add the ProbeAnimation component (keeps track of the lab)
-            eManager.SetComponentData(neuron, new PAComponent { lab = labData[i] });
+    //        // Add the ProbeAnimation component (keeps track of the lab)
+    //        eManager.SetComponentData(neuron, new PAComponent { lab = labData[i] });
 
-            neurons.Add(neuron);
-            returnList.Add(neuron);
-        }
+    //        neurons.Add(neuron);
+    //        returnList.Add(neuron);
+    //    }
 
-        newNeurons.Dispose();
-        return returnList;
-    }
+    //    newNeurons.Dispose();
+    //    return returnList;
+    //}
 
-    public List<Entity> AddNeurons(List<float3> mlapdv, List<IBLEventAverageComponent> eventAverage)
+    public List<Entity> AddNeurons(List<float3> mlapdv, List<IBLEventAverageComponent> eventAverage, List<float4> colors)
         {
             EntityArchetype neuronArchetype = eManager.CreateArchetype(
                 typeof(Translation),
@@ -378,9 +378,6 @@ public class NeuronEntityManager : MonoBehaviour
                 typeof(RenderMesh),
                 typeof(RenderBounds),
                 typeof(MaterialColor),
-                typeof(SpikingComponent),
-                typeof(SpikingColorComponent),
-                typeof(SpikingRandomComponent),
                 typeof(IBLEventAverageComponent),
                 typeof(PositionComponent)
                 );
@@ -396,11 +393,10 @@ public class NeuronEntityManager : MonoBehaviour
                 eManager.SetComponentData(neuron, new PositionComponent { position = new float3(mlapdv[i]) });
                 eManager.SetComponentData(neuron, new Translation { Value = CCF2Transform(mlapdv[i]) });
                 eManager.SetComponentData(neuron, new Scale { Value = neuronScale });
+                eManager.SetComponentData(neuron, new MaterialColor { Value = colors[i] });
                 eManager.SetSharedComponentData(neuron, _neuronRenderMesh);
-                eManager.SetComponentData(neuron, new SpikingColorComponent { color = new float4(0f, 0f, 0f, 0.65f) });
 
                 eManager.SetComponentData(neuron, eventAverage[i]);
-                eManager.SetComponentData(neuron, NewSpikingRandomComponent());
 
                 neurons.Add(neuron);
                 returnList.Add(neuron);
@@ -448,48 +444,48 @@ public class NeuronEntityManager : MonoBehaviour
         return returnList;
     }
 
-    public List<Entity> AddNeurons(List<float3> mlapdv, float4[] colors, float[] uCoord)
-    {
-        Debug.Log(string.Format("Creating {0} neurons",mlapdv.Count));
+    //public List<Entity> AddNeurons(List<float3> mlapdv, float4[] colors, float[] uCoord)
+    //{
+    //    Debug.Log(string.Format("Creating {0} neurons",mlapdv.Count));
 
-        EntityArchetype neuronArchetype = eManager.CreateArchetype(
-            typeof(Translation),
-            typeof(Scale),
-            typeof(LocalToWorld),
-            typeof(RenderMesh),
-            typeof(RenderBounds),
-            typeof(MaterialColor),
-            typeof(MaterialUCoord),
-            typeof(MaterialVCoord),
-            typeof(PositionComponent),
-            typeof(MaterialBrainScale)
-            );
+    //    EntityArchetype neuronArchetype = eManager.CreateArchetype(
+    //        typeof(Translation),
+    //        typeof(Scale),
+    //        typeof(LocalToWorld),
+    //        typeof(RenderMesh),
+    //        typeof(RenderBounds),
+    //        typeof(MaterialColor),
+    //        typeof(MaterialUCoord),
+    //        typeof(MaterialVCoord),
+    //        typeof(PositionComponent),
+    //        typeof(MaterialBrainScale)
+    //        );
 
-        int n = mlapdv.Count;
+    //    int n = mlapdv.Count;
 
-        NativeArray<Entity> newNeurons = eManager.CreateEntity(neuronArchetype, n, Allocator.Temp);
-        List<Entity> returnList = new List<Entity>();
+    //    NativeArray<Entity> newNeurons = eManager.CreateEntity(neuronArchetype, n, Allocator.Temp);
+    //    List<Entity> returnList = new List<Entity>();
 
-        for (int i = 0; i < n; i++)
-        {
-            Entity neuron = newNeurons[i];
-            eManager.SetComponentData(neuron, new PositionComponent { position = new float3(mlapdv[i]) });
-            eManager.SetComponentData(neuron, new Translation { Value = CCF2Transform(mlapdv[i]) });
-            eManager.SetComponentData(neuron, new Scale { Value = neuronScale });
-            eManager.SetSharedComponentData(neuron, _neuronDataRenderMesh);
-            eManager.SetComponentData(neuron, new MaterialColor { Value = colors[i] });
-            eManager.SetComponentData(neuron, new MaterialUCoord { Value = uCoord[i] });
-            eManager.SetComponentData(neuron, new MaterialVCoord { Value = 0f });
-            eManager.SetComponentData(neuron, new MaterialBrainScale { Value = 1f });
+    //    for (int i = 0; i < n; i++)
+    //    {
+    //        Entity neuron = newNeurons[i];
+    //        eManager.SetComponentData(neuron, new PositionComponent { position = new float3(mlapdv[i]) });
+    //        eManager.SetComponentData(neuron, new Translation { Value = CCF2Transform(mlapdv[i]) });
+    //        eManager.SetComponentData(neuron, new Scale { Value = neuronScale });
+    //        eManager.SetSharedComponentData(neuron, _neuronDataRenderMesh);
+    //        eManager.SetComponentData(neuron, new MaterialColor { Value = colors[i] });
+    //        eManager.SetComponentData(neuron, new MaterialUCoord { Value = uCoord[i] });
+    //        eManager.SetComponentData(neuron, new MaterialVCoord { Value = 0f });
+    //        eManager.SetComponentData(neuron, new MaterialBrainScale { Value = 1f });
 
-            neurons.Add(neuron);
-            returnList.Add(neuron);
-        }
-        Debug.Log("Created neurons");
+    //        neurons.Add(neuron);
+    //        returnList.Add(neuron);
+    //    }
+    //    Debug.Log("Created neurons");
 
-        newNeurons.Dispose();
-        return returnList;
-    }
+    //    newNeurons.Dispose();
+    //    return returnList;
+    //}
 
     private SpikingRandomComponent NewSpikingRandomComponent()
     {

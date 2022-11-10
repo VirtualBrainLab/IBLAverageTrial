@@ -43,7 +43,7 @@ public class IBLTask : Experiment
     private static int[] rightCorrIdx = { 91, 131, 158 };
     private static int[] rightIncIdx = { 84, 131, 165 };
 
-    private int[][] eventIdxsByType = { leftCorrIdx, leftIncIdx, rightCorrIdx, rightIncIdx };
+    public static int[][] eventIdxsByType = { leftCorrIdx, leftIncIdx, rightCorrIdx, rightIncIdx };
 
     //private int stimOnIdx = 37 - 1;
     //private int firstWheelIdx = (37 + 51) - 1;
@@ -113,6 +113,7 @@ public class IBLTask : Experiment
 
     public override void TaskUpdate()
     {
+        return;
         if (TaskRunning())
         {
             sessionCurrentTime += Time.deltaTime;
@@ -260,6 +261,11 @@ public class IBLTask : Experiment
                 }
             }
         }
+    }
+
+    public void SetTimeIndex(int index)
+    {
+        trialTimeIndex = index;
     }
 
     public int GetTimeIndex()

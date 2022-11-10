@@ -67,3 +67,4 @@ Assets/Best HTTP/*
 Assets/vbl-core/*
 *.bytes
 Assets/Datasets/*.asset
+Assets/Datasets/bwm_release/*
