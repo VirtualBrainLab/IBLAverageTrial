@@ -20,10 +20,6 @@ public class LoadData_IBL_EventAverage : MonoBehaviour
     [SerializeField] private TextAsset uuidListAssetRaw;
     [SerializeField] private TextAsset mlapdvAssetRaw;
 
-    [SerializeField] private TextAsset dataAssetBN;
-    [SerializeField] private TextAsset uuidListAssetBN;
-    [SerializeField] private TextAsset mlapdvAssetBN;
-
     [SerializeField] private TextAsset dataAssetStimOn;
     [SerializeField] private TextAsset uuidListAssetStimOn;
     [SerializeField] private TextAsset mlapdvAssetStimOn;
@@ -38,7 +34,6 @@ public class LoadData_IBL_EventAverage : MonoBehaviour
     #endregion
 
     (List<float3> mlapdv, List<float4> colors, List<IBLEventAverageComponent> data) avgTrialCompRaw;
-    (List<float3> mlapdv, List<float4> colors, List<IBLEventAverageComponent> data) avgTrialCompBN;
     (List<float3> mlapdv, List<float4> colors, List<IBLEventAverageComponent> data) avgTrialCompStimOn;
     (List<float3> mlapdv, List<float4> colors, List<IBLEventAverageComponent> data) avgTrialCompWheel;
     (List<float3> mlapdv, List<float4> colors, List<IBLEventAverageComponent> data) avgTrialCompFeedback;
@@ -54,6 +49,8 @@ public class LoadData_IBL_EventAverage : MonoBehaviour
     int[] side = { -1, -1, 1, 1 };
     int[] corr = { 1, -1, 1, -1 };
 
+    private static int[] stimOnIndexes = { 74, 64, 73, 66 };
+
     private float TIME_SCALE_FACTOR = 0.0625f;
 
     private float[] spikeRateMap;
@@ -63,9 +60,6 @@ public class LoadData_IBL_EventAverage : MonoBehaviour
         avgTrialCompRaw.mlapdv = new List<float3>();
         avgTrialCompRaw.colors = new List<float4>();
         avgTrialCompRaw.data = new List<IBLEventAverageComponent>();
-        avgTrialCompBN.mlapdv = new List<float3>();
-        avgTrialCompBN.colors = new List<float4>();
-        avgTrialCompBN.data = new List<IBLEventAverageComponent>();
         avgTrialCompStimOn.mlapdv = new List<float3>();
         avgTrialCompStimOn.colors = new List<float4>();
         avgTrialCompStimOn.data = new List<IBLEventAverageComponent>();
@@ -77,7 +71,6 @@ public class LoadData_IBL_EventAverage : MonoBehaviour
         avgTrialCompFeedback.data = new List<IBLEventAverageComponent>();
         dataLists = new List<(List<float3> mlapdv, List<float4> colors, List<IBLEventAverageComponent> data)>();
         dataLists.Add(avgTrialCompRaw);
-        dataLists.Add(avgTrialCompBN);
         dataLists.Add(avgTrialCompStimOn);
         dataLists.Add(avgTrialCompWheel);
         dataLists.Add(avgTrialCompFeedback);
@@ -96,7 +89,7 @@ public class LoadData_IBL_EventAverage : MonoBehaviour
 
     public void SwapNeuronData(int dataGroup)
     {
-        _eventAverageManager.SetDatasetType(dataGroup <= 1);
+        _eventAverageManager.SetDatasetType(dataGroup == 0);
         _eventAverageManager.SetDatasetIndex(dataGroup);
 
         if (dataLists[dataGroup].mlapdv.Count == 0)
@@ -150,13 +143,39 @@ public class LoadData_IBL_EventAverage : MonoBehaviour
             //string uuid = uuidList[ui];
             FixedList4096Bytes<float> spikeRate = new FixedList4096Bytes<float>();
 
+
+            // Along the way, pick up the baseline period data
+            float baselineSum = 0;
+            int baselineCount = 0;
+
             for (int i = 0; i < (SCALED_LEN * conditions); i++)
             {
-                spikeRate.AddNoResize(Mathf.Log(1f + spikeRates[(ui * (SCALED_LEN * conditions)) + i] * TIME_SCALE_FACTOR));
+                float datapoint = spikeRates[(ui * (SCALED_LEN * conditions)) + i];
+                if (dataGroup==0)
+                {
+                    int remainder = i % 250;
+                    if (remainder < stimOnIndexes[i / 250])
+                    {
+                        baselineSum += datapoint;
+                        baselineCount++;
+                    }
+                }
+                else
+                {
+                    int remainder = i % 100;
+                    if (remainder < 50)
+                    {
+                        baselineSum += datapoint;
+                        baselineCount++;
+                    }
+                }
+                spikeRate.AddNoResize(Mathf.Clamp(datapoint, 0f, 125f));
+                //spikeRate.AddNoResize(Mathf.Log(1f +  * TIME_SCALE_FACTOR));
             }
 
             IBLEventAverageComponent eventAverageComponent = new IBLEventAverageComponent();
             eventAverageComponent.spikeRate = spikeRate;
+            eventAverageComponent.baseline = (baselineCount > 0) ? baselineSum / baselineCount + 0.1f : 0f;
 
             dataObject.data.Add(eventAverageComponent);
         }
@@ -198,7 +217,7 @@ public class LoadData_IBL_EventAverage : MonoBehaviour
                                                         Mathf.RoundToInt(pos.z * 1000 / 25),
                                                         Mathf.RoundToInt(pos.x * 1000 / 25));
             Color posColor = ccfmodelcontrol.GetCCFAreaColor(posId);
-            dataObject.colors.Add(new float4(posColor.r, posColor.b, posColor.g, 1f));
+            dataObject.colors.Add(new float4(posColor.r, posColor.g, posColor.b, 1f));
         }
 
         dataLists[dataGroup] = dataObject;
@@ -213,12 +232,10 @@ public class LoadData_IBL_EventAverage : MonoBehaviour
             case 0:
                 return (dataAssetRaw, uuidListAssetRaw, mlapdvAssetRaw);
             case 1:
-                return (dataAssetBN, uuidListAssetBN, mlapdvAssetBN);
-            case 2:
                 return (dataAssetStimOn, uuidListAssetStimOn, mlapdvAssetStimOn);
-            case 3:
+            case 2:
                 return (dataAssetWheel, uuidListAssetWheel, mlapdvAssetWheel);
-            case 4:
+            case 3:
                 return (dataAssetFeedback, uuidListAssetFeedback, mlapdvAssetFeedback);
             default:
                 return (null, null, null);

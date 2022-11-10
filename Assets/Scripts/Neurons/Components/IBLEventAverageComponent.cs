@@ -5,6 +5,7 @@ using Unity.Rendering;
 
 public struct IBLEventAverageComponent : IComponentData
 {
+    public float baseline;
     public FixedList4096Bytes<float> spikeRate;
 }
 

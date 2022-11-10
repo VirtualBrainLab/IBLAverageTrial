@@ -43,6 +43,8 @@ public class EventAverageManager : MonoBehaviour
     [SerializeField] private Camera mainCamera;
     private IBLTask task;
 
+    public bool forceUpdate;
+
     private void Awake()
     {
         _materialsTransparent = _useTransparentMaterials;
@@ -54,6 +56,8 @@ public class EventAverageManager : MonoBehaviour
         foreach (Renderer renderer in mouse.GetComponentsInChildren<Renderer>())
             if (!rendererDict.ContainsKey(renderer))
                 rendererDict.Add(renderer, renderer.material);
+
+        neuronScaleMult = 1f;
     }
 
     private void Start()
@@ -240,22 +244,23 @@ public class EventAverageManager : MonoBehaviour
         else
         {
             // this depends on what data is being displayed
-            if (trialDatasetIndex == 2)
+            if (trialDatasetIndex == 1)
                 trialPositionPanel.UpdateTextPositions(50,
                     -1,
                     -1,
                     100);
-            else if (trialDatasetIndex == 3)
+            else if (trialDatasetIndex == 2)
                 trialPositionPanel.UpdateTextPositions(-1,
                     50,
                     -1,
                     100);
-            else if (trialDatasetIndex == 4)
+            else if (trialDatasetIndex == 3)
                 trialPositionPanel.UpdateTextPositions(-1,
                     -1,
                     50,
                     100);
         }
+        forceUpdate = true;
     }
 
     public bool trialDatasetType { get; private set; }
@@ -271,6 +276,25 @@ public class EventAverageManager : MonoBehaviour
     {
         trialDatasetIndex = newIndex;
         UpdateTrialUI();
+    }
+
+    #endregion
+
+    #region baselining and scaling
+
+    public bool useBaseline { get; private set; }
+    public void SetBaseline(bool baseline)
+    {
+        useBaseline = baseline;
+        forceUpdate = true;
+    }
+
+    public float neuronScaleMult { get; private set; }
+
+    public void SetNeuronScaleMult(float scale)
+    {
+        neuronScaleMult = scale;
+        forceUpdate = true;
     }
 
     #endregion

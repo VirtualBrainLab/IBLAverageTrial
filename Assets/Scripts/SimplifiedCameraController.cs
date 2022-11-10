@@ -76,7 +76,7 @@ public class SimplifiedCameraController : MonoBehaviour
                 }
             }
 
-            if (result.gameObject.CompareTag("PositionPanel"))
+            if (!mouseDown && result.gameObject.CompareTag("PositionPanel"))
             {
                 // change time according to the position within the panel
                 if (Input.GetMouseButton(0))

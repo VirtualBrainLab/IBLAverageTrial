@@ -4,7 +4,7 @@ using UnityEngine;
 // Should be attached to TrialPosPanel
 public class UpdateTrialPosPanel : MonoBehaviour
 {
-    private RectTransform trialPosLineTransform;
+    [SerializeField] private RectTransform trialPosLineT;
     private float trialPosPanelWidth;
     private IBLTask iblTask;
 
@@ -23,7 +23,6 @@ public class UpdateTrialPosPanel : MonoBehaviour
     {
         iblTask = GameObject.Find("main").GetComponent<ExperimentManager>().GetIBLTask();
         RectTransform trialPosPanelBody = parentPanelGO.GetComponent<RectTransform>();
-        trialPosLineTransform = (RectTransform) trialPosPanelBody.Find("CurTrialPosLine");
         trialPosPanelWidth = trialPosPanelBody.rect.width;
     }
 
@@ -33,7 +32,7 @@ public class UpdateTrialPosPanel : MonoBehaviour
         int curIndex = iblTask.GetTimeIndex();
         float curX = trialPosPanelWidth * curIndex / (eaManager.trialDatasetType ? 250 : 100);
         //Debug.Log(curIndex + " " + curX);
-        trialPosLineTransform.anchoredPosition = new Vector2(curX, trialPosLineTransform.anchoredPosition.y);
+        trialPosLineT.anchoredPosition = new Vector2(curX, trialPosLineT.anchoredPosition.y);
     }
 
     public void UpdateTextPositions(int stimOnIdx, int wheelIdx, int feedbackIdx, int scaledLength)

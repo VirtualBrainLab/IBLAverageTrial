@@ -20,10 +20,13 @@ public partial class IBLEventAverageSystem : SystemBase
     private int[] trialIdxsPSTH = { 0, 100, 200, 300 };
 
     float prevBrainScale = 1f;
+    float prevIndex;
 
     protected override void OnStartRunning()
     {
         //trialTimeIndex = 0;
+        prevIndex = -1;
+
         iblTask = GameObject.Find("main").GetComponent<ExperimentManager>().GetIBLTask();
         nemanager = GameObject.Find("main").GetComponent<NeuronEntityManager>();
         eaManager = GameObject.Find("EventAverage").GetComponent<EventAverageManager>();
@@ -36,7 +39,14 @@ public partial class IBLEventAverageSystem : SystemBase
             return;
 
         float brainScaleRaw = eaManager.brainScale;
-        float brainScale = 0.0625f * brainScaleRaw;
+        float brainScale = 0.0625f * brainScaleRaw * eaManager.neuronScaleMult;
+        bool baseline = eaManager.useBaseline;
+        int dataGroup = eaManager.trialDatasetIndex;
+
+
+        float spikingScale = baseline ?
+            (dataGroup == 0 ? 10f : 5f) :
+            125f;
 
         if (eaManager.standaloneMode)
         {
@@ -47,11 +57,23 @@ public partial class IBLEventAverageSystem : SystemBase
             curIndex += trialStartIdx;
 
             // Update lerping neurons
-            Entities
-                .ForEach((ref Scale scale, in IBLEventAverageComponent eventAverage) =>
-                {
-                    scale.Value = eventAverage.spikeRate[curIndex] * brainScale;
-                }).ScheduleParallel(); // .Run();
+            if (curIndex != prevIndex || eaManager.forceUpdate)
+            {
+                eaManager.forceUpdate = false;
+                prevIndex = curIndex;
+                Entities
+                    .ForEach((ref Scale scale, in IBLEventAverageComponent eventAverage) =>
+                    {
+                        if (baseline)
+                        {
+                            float spk = eventAverage.spikeRate[curIndex];
+                            spk = Mathf.Clamp((spk - eventAverage.baseline) / eventAverage.baseline,0f,10f);
+                            scale.Value = spk * brainScale / spikingScale;
+                        }
+                        else
+                            scale.Value = eventAverage.spikeRate[curIndex] * brainScale / spikingScale;
+                    }).ScheduleParallel(); // .Run();
+            }
         }
         else
         {        //trialTimeIndex += 0.1f;
