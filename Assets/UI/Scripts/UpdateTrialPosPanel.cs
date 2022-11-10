@@ -14,6 +14,8 @@ public class UpdateTrialPosPanel : MonoBehaviour
     [SerializeField] private RectTransform stimOnT;
     [SerializeField] private RectTransform wheelT;
     [SerializeField] private RectTransform feedbackT;
+
+    [SerializeField] private EventAverageManager eaManager;
     #endregion
 
     // Start is called before the first frame update
@@ -29,7 +31,7 @@ public class UpdateTrialPosPanel : MonoBehaviour
     void Update()
     {
         int curIndex = iblTask.GetTimeIndex();
-        float curX = trialPosPanelWidth * curIndex / 250.0f;
+        float curX = trialPosPanelWidth * curIndex / (eaManager.trialDatasetType ? 250 : 100);
         //Debug.Log(curIndex + " " + curX);
         trialPosLineTransform.anchoredPosition = new Vector2(curX, trialPosLineTransform.anchoredPosition.y);
     }

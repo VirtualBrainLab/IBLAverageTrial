@@ -17802,6 +17802,7 @@ MonoBehaviour:
   stimOnT: {fileID: 810344333}
   wheelT: {fileID: 1725487196}
   feedbackT: {fileID: 1229211293}
+  eaManager: {fileID: 15290257}
 --- !u!1 &2089084797
 GameObject:
   m_ObjectHideFlags: 0

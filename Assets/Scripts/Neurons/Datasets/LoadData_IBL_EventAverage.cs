@@ -1,12 +1,8 @@
 using System;
-using System.Linq;
-using System.Collections;
 using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.AsyncOperations;
 
 public class LoadData_IBL_EventAverage : MonoBehaviour
 {
@@ -95,7 +91,7 @@ public class LoadData_IBL_EventAverage : MonoBehaviour
         await vdmanager.LoadAnnotationDataset(new List<Action>());
 
         annotationDataset = vdmanager.GetAnnotationDataset();
-        SwapNeuronData(1);
+        SwapNeuronData(0);
     }
 
     public void SwapNeuronData(int dataGroup)

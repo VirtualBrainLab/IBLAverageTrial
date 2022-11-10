@@ -30,26 +30,19 @@ public class IBLTask : Experiment
     private float[] stimPositionTriggers = { 0, 45 };
 
     // LOCAL TASK PARAMETER
-    // 37 51 62 100 (250 total)
 
-    //avg_event_idxs_by_type = [[92, 130, 157], # left correct
-    //                       [83, 131, 166], # left incorrect
-    //                       [91, 131, 158], # right correct
-    //                       [84, 131, 165]] # right incorrect
+    //[[ 74 133 175]
+    //[ 64 135 185]
+    //[ 73 135 176]
+    //[ 66 133 183]]
 
     //                          stim wheel feedback
-    private static int[] leftCorrIdx = { 92, 130, 157 };
-    private static int[] leftIncIdx = { 83, 131, 166 };
-    private static int[] rightCorrIdx = { 91, 131, 158 };
-    private static int[] rightIncIdx = { 84, 131, 165 };
+    private static int[] leftCorrIdx = { 74, 133, 175 };
+    private static int[] leftIncIdx = { 64, 135, 185 };
+    private static int[] rightCorrIdx = { 73, 133, 176 };
+    private static int[] rightIncIdx = { 66, 133, 183 };
 
     public static int[][] eventIdxsByType = { leftCorrIdx, leftIncIdx, rightCorrIdx, rightIncIdx };
-
-    //private int stimOnIdx = 37 - 1;
-    //private int firstWheelIdx = (37 + 51) - 1;
-    //private int feedbackIdx = (37 + 51 + 62) - 1;
-    //private int endIdx = (37 + 51 + 62 + 100) - 1;
-
 
     // INTERNAL TRACKING
     // 0=qui 1=stim on 2=wheel moving 3=reward 4=ITI
