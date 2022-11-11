@@ -151,19 +151,15 @@ public class EventAverageManager : MonoBehaviour
     /// ANIMATION
     /// 
 
-    private bool loaded = false;
-
-    public void DoneLoadingCallback()
-    {
-        Debug.Log("Done loading");
-        loaded = true;
-    }
+    private bool launched;
 
     public void Launch()
     {
-        if (loaded)
+        Debug.Log("Launched");
+        if (!launched)
         {
             StartCoroutine(DropRig());
+            launched = true;
         }
     }
 
@@ -234,6 +230,9 @@ public class EventAverageManager : MonoBehaviour
 
     private void UpdateTrialUI()
     {
+        if (trialPositionPanel == null)
+            return;
+
         if (trialDatasetType)
         {
             trialPositionPanel.UpdateTextPositions(IBLTask.eventIdxsByType[trialType][0],

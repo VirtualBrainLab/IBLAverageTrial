@@ -98,8 +98,8 @@ public class LoadData_IBL_EventAverage : MonoBehaviour
             LoadData(dataGroup);
         }
 
-
-        nemanager.RemoveAllNeurons();
+        if (_eventAverageManager.standaloneMode)
+            nemanager.RemoveAllNeurons();
         nemanager.AddNeurons(dataLists[dataGroup].mlapdv, dataLists[dataGroup].data, dataLists[dataGroup].colors);
     }
 
@@ -142,7 +142,6 @@ public class LoadData_IBL_EventAverage : MonoBehaviour
         {
             //string uuid = uuidList[ui];
             FixedList4096Bytes<float> spikeRate = new FixedList4096Bytes<float>();
-
 
             // Along the way, pick up the baseline period data
             float baselineSum = 0;

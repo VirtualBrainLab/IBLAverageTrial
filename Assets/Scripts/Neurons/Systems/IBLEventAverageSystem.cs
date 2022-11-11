@@ -77,8 +77,8 @@ public partial class IBLEventAverageSystem : SystemBase
         }
         else
         {        //trialTimeIndex += 0.1f;
-            float deltaTime = Time.DeltaTime;
-            double curTime = Time.ElapsedTime;
+            //float deltaTime = Time.DeltaTime;
+            //double curTime = Time.ElapsedTime;
             bool corr = iblTask.GetCorrect();
             int curIndex = iblTask.GetTimeIndex();
             float smallScale = nemanager.GetNeuronScale();
@@ -113,14 +113,13 @@ public partial class IBLEventAverageSystem : SystemBase
             Entities
                 .ForEach((ref Scale scale, in IBLEventAverageComponent eventAverage) =>
                 {
-                    //float4 maxFRColor = lerpColor.maxColor;
-                    //float4 zeroFRColor = lerpColor.zeroColor;
-                    float curPercent = eventAverage.spikeRate[curIndex];
-                    //color.Value = new float4(Mathf.Lerp(zeroFRColor.x, maxFRColor.x, curPercent),
-                    //                         Mathf.Lerp(zeroFRColor.y, maxFRColor.y, curPercent),
-                    //                         Mathf.Lerp(zeroFRColor.z, maxFRColor.z, curPercent),
-                    //                         Mathf.Lerp(zeroFRColor.w, maxFRColor.w, curPercent));
-                    scale.Value = 0.01f + curPercent * brainScale;
+                    //float curPercent = eventAverage.spikeRate[curIndex];
+
+                    float spk = eventAverage.spikeRate[curIndex];
+                    spk = Mathf.Clamp((spk - eventAverage.baseline) / eventAverage.baseline, 0f, 10f);
+                    scale.Value = spk * brainScale / spikingScale;
+
+                    //scale.Value = 0.01f + curPercent * brainScale;
                 }).ScheduleParallel(); // .Run();
 
             Entities

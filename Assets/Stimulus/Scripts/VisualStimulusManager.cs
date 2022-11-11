@@ -84,7 +84,7 @@ public class VisualStimulusManager : MonoBehaviour
 
         //// DRAG CODE
         //if (uiCam == null) { uiCam = GameObject.Find("UICamera").GetComponent<Camera>(); }
-        //offsetVector = Vector3.forward * 0.01f;
+        offsetVector = Vector3.forward * 0.01f;
     }
 
     // Update is called once per frame

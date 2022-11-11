@@ -3529,15 +3529,15 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 288253984}
-  m_LocalRotation: {x: 0, y: -1, z: 0, w: 0}
-  m_LocalPosition: {x: 0, y: -127.8, z: -49}
-  m_LocalScale: {x: 100, y: 100, z: 100}
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: -97.3, y: -127.8, z: -32.1}
+  m_LocalScale: {x: 125, y: 125, z: 125}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 4410178}
   m_Father: {fileID: 0}
   m_RootOrder: 7
-  m_LocalEulerAnglesHint: {x: 0, y: -180, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!4 &291412667 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4560098666253558862, guid: e084adc581a74a04c9abe7813fe77412, type: 3}
@@ -8637,9 +8637,6 @@ MonoBehaviour:
   lickBehavior: {fileID: 713980113}
   wheelRotationBehavior: {fileID: 713980110}
   mouseAI: {fileID: 0}
-  run: {fileID: 0}
-  pause: {fileID: 0}
-  stop: {fileID: 0}
   experimentChooser: {fileID: 0}
   UIPanel: {fileID: 0}
 --- !u!224 &1036566695

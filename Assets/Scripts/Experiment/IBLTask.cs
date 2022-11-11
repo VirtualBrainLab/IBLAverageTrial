@@ -106,7 +106,6 @@ public class IBLTask : Experiment
 
     public override void TaskUpdate()
     {
-        return;
         if (TaskRunning())
         {
             sessionCurrentTime += Time.deltaTime;

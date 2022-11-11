@@ -24,9 +24,9 @@ public class ExperimentManager : MonoBehaviour
     public WheelRotationBehavior wheelRotationBehavior;
     public MouseAIBehavior mouseAI;
 
-    public Button run;
-    public Button pause;
-    public Button stop;
+    //public Button run;
+    //public Button pause;
+    //public Button stop;
 
     //Setting the experiment chooser field will enable the experiment manager
     [SerializeField] private TMP_Dropdown experimentChooser;
@@ -47,6 +47,9 @@ public class ExperimentManager : MonoBehaviour
     private void Start()
     {
         SetupUI();
+
+        if (!eamanager.standaloneMode)
+            activeExperiment = experiments[0];
     }
 
     public void DisableStimulus()
@@ -59,10 +62,10 @@ public class ExperimentManager : MonoBehaviour
     {
         if (activeExperiment != null)
         {
-            if (activeExperiment.TaskLoaded() && !run.interactable)
-            {
-                run.interactable = true;
-            }
+            //if (activeExperiment.TaskLoaded() && !run.interactable)
+            //{
+            //    run.interactable = true;
+            //}
 
             if (activeExperiment.TaskRunning())
             {
@@ -112,16 +115,16 @@ public class ExperimentManager : MonoBehaviour
         // Set all buttons to not be interactable
         if (activeExperiment.TaskLoaded())
         {
-            run.interactable = true;
-            pause.interactable = false;
-            stop.interactable = false;
+            //run.interactable = true;
+            //pause.interactable = false;
+            //stop.interactable = false;
         }
         else
         {
             activeExperiment.LoadTask();
-            run.interactable = false;
-            pause.interactable = false;
-            stop.interactable = false;
+            //run.interactable = false;
+            //pause.interactable = false;
+            //stop.interactable = false;
         }
     }
 
@@ -172,22 +175,23 @@ public class ExperimentManager : MonoBehaviour
     /// </summary>
     public void Play()
     {
+        Debug.Log("play pressed");
         activeExperiment.RunTask();
-        pause.interactable = true;
-        stop.interactable = true;
+        //pause.interactable = true;
+        //stop.interactable = true;
     }
 
     public void Pause()
     {
         activeExperiment.PauseTask();
-        pause.interactable = false;
+        //pause.interactable = false;
     }
 
     public void Stop()
     {
         activeExperiment.StopTask();
-        pause.interactable = false;
-        stop.interactable = false;
+        //pause.interactable = false;
+        //stop.interactable = false;
     }
 
     public void SpeedUp()
