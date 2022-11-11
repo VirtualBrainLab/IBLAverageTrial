@@ -83,6 +83,7 @@ public partial class IBLEventAverageSystem : SystemBase
             int curIndex = iblTask.GetTimeIndex();
             float smallScale = nemanager.GetNeuronScale();
 
+
             int trialStartIdx;
             if (iblTask.GetSide() == -1)
             {
@@ -93,7 +94,8 @@ public partial class IBLEventAverageSystem : SystemBase
                 trialStartIdx = corr ? 500 : 750;
             }
             curIndex += trialStartIdx;
-            float curIndexPerc = curIndex / 999f;
+
+            //float curIndexPerc = curIndex / 999f;
 
             // check for scale change
             if (brainScale != prevBrainScale)
@@ -116,17 +118,16 @@ public partial class IBLEventAverageSystem : SystemBase
                     //float curPercent = eventAverage.spikeRate[curIndex];
 
                     float spk = eventAverage.spikeRate[curIndex];
-                    spk = Mathf.Clamp((spk - eventAverage.baseline) / eventAverage.baseline, 0f, 10f);
-                    scale.Value = spk * brainScale / spikingScale;
+                    scale.Value = spk * brainScale;
 
                     //scale.Value = 0.01f + curPercent * brainScale;
                 }).ScheduleParallel(); // .Run();
 
-            Entities
-                .ForEach((ref MaterialVCoord vCoord) =>
-                {
-                    vCoord.Value = curIndexPerc;
-                }).ScheduleParallel();
+            //Entities
+            //    .ForEach((ref MaterialVCoord vCoord) =>
+            //    {
+            //        vCoord.Value = curIndexPerc;
+            //    }).ScheduleParallel();
         }
     }
 }

@@ -114,7 +114,7 @@ public class LoadData_IBL_EventAverage : MonoBehaviour
 
         //Dictionary<string, IBLEventAverageComponent> eventAverageData = new Dictionary<string, IBLEventAverageComponent>();
 
-        int SCALED_LEN = dataGroup <= 1 ? SCALED_LEN_TRIAL : SCALED_LEN_PSTH;
+        int SCALED_LEN = dataGroup == 0 ? SCALED_LEN_TRIAL : SCALED_LEN_PSTH;
 
         //string uuidListFile = textAssets.uuidList.text;
         //string[] uuidList = uuidListFile.Split(char.Parse(","));
@@ -173,8 +173,16 @@ public class LoadData_IBL_EventAverage : MonoBehaviour
             }
 
             IBLEventAverageComponent eventAverageComponent = new IBLEventAverageComponent();
-            eventAverageComponent.spikeRate = spikeRate;
             eventAverageComponent.baseline = (baselineCount > 0) ? baselineSum / baselineCount + 0.1f : 0f;
+
+            if (!_eventAverageManager.standaloneMode)
+            {
+                // do the baseline now
+                for (int i = 0; i < SCALED_LEN * conditions; i++)
+                    spikeRate[i] = Mathf.Clamp((spikeRate[i] - eventAverageComponent.baseline) / eventAverageComponent.baseline, 0f, 10f) / 10f;
+            }
+
+            eventAverageComponent.spikeRate = spikeRate;
 
             dataObject.data.Add(eventAverageComponent);
         }

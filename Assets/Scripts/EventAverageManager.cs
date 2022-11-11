@@ -57,7 +57,10 @@ public class EventAverageManager : MonoBehaviour
             if (!rendererDict.ContainsKey(renderer))
                 rendererDict.Add(renderer, renderer.material);
 
+        //if (standaloneMode)
         neuronScaleMult = 1f;
+        //else
+        //    neuronScaleMult = 10f;
     }
 
     private void Start()
@@ -189,22 +192,20 @@ public class EventAverageManager : MonoBehaviour
         while (Elapsed() < 70f)
         {
             yield return new WaitForSecondsRealtime(0.01f);
-            _brainScale = _brainScale * 1.003f;
+            _brainScale = _brainScale * 1.0025f;
         }
 
         yield return new WaitForSecondsRealtime(20f);
         _expManager.DisableStimulus();
 
-        while (Elapsed() < 130f)
+        while (Elapsed() < 160f)
         {
-            if (Elapsed() > 110f)
+            if (Elapsed() > 100f)
                 floor.SetActive(false);
 
             yield return new WaitForSecondsRealtime(0.01f);
-            _brainScale = _brainScale * 1.0025f;
+            _brainScale = _brainScale * 1.0005f;
         }
-
-        yield return new WaitForSecondsRealtime(30f);
 
         Debug.Log("turning down the lights");
         _expManager.Stop();
@@ -212,7 +213,6 @@ public class EventAverageManager : MonoBehaviour
         rig.SetActive(false);
         mouse.SetActive(false);
         brain.SetActive(false);
-        floor.SetActive(false);
     }
 
     private float Elapsed()

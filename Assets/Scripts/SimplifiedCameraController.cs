@@ -41,6 +41,9 @@ public class SimplifiedCameraController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!_eaManager.standaloneMode)
+            return;
+
         //Set up the new Pointer Event
         m_PointerEventData = new PointerEventData(m_EventSystem);
         //Set the Pointer Event Position to that of the mouse position
