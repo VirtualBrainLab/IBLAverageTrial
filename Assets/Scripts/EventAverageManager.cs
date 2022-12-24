@@ -41,9 +41,14 @@ public class EventAverageManager : MonoBehaviour
     private Dictionary<Renderer, Material> rendererDict;
 
     [SerializeField] private Camera mainCamera;
+    [SerializeField] private Camera backupCamera;
     private IBLTask task;
 
     public bool forceUpdate;
+
+    private bool playing;
+    private float indexPercentage;
+    private float speedMult = 0.25f;
 
     private void Awake()
     {
@@ -87,7 +92,9 @@ public class EventAverageManager : MonoBehaviour
     public void UpdateIndex(float indexPercentage)
     {
         //task.SetTimeIndex(Mathf.RoundToInt(indexSlider.value));
+        this.indexPercentage = indexPercentage;
         task.SetTimeIndex(Mathf.RoundToInt(indexPercentage * (trialDatasetType ? 250 : 100)));
+        playing = false;
     }
 
     public void ReplaceMaterials()
@@ -102,6 +109,8 @@ public class EventAverageManager : MonoBehaviour
         }
         // make the camera see the brain, or not
         mainCamera.cullingMask = transparentLayerMask.value;
+        if (backupCamera != null)
+            backupCamera.cullingMask = transparentLayerMask.value;
     }
 
     public void RecoverMaterials()
@@ -112,6 +121,8 @@ public class EventAverageManager : MonoBehaviour
         //renderer.material = rendererDict[renderer];
 
         mainCamera.cullingMask = visibleLayerMask.value;
+        if (backupCamera != null)
+            backupCamera.cullingMask = visibleLayerMask.value;
     }
 
     private void Update()
@@ -146,6 +157,26 @@ public class EventAverageManager : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.R))
                 Launch();
+        }
+
+        if (standaloneMode)
+        {
+            if (Input.GetKeyDown(KeyCode.Space))
+                playing = !playing;
+
+            if (Input.GetKeyDown(KeyCode.Plus))
+                speedMult = speedMult * 1.25f;
+
+            if (Input.GetKeyDown(KeyCode.Minus))
+                speedMult = speedMult * 0.8f;
+
+            if (playing)
+            {
+                indexPercentage += Time.deltaTime * speedMult;
+                if (indexPercentage > 1f)
+                    indexPercentage -= 1f;
+                task.SetTimeIndex(Mathf.RoundToInt(indexPercentage * (trialDatasetType ? 250 : 100)));
+            }
         }
     }
 
